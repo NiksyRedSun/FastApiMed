@@ -1,0 +1,14 @@
+.idea
+.git
+.gitattributes
+.env
+/venv
+/trash
+*/__pycache__
+/__pycache__
+tests.py
+SomeRepos/Chars.db
+/studysite/media
+fapi.db
+app/static/images
+app/meddb.db
