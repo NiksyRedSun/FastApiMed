@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import APIRouter, Request, Depends, FastAPI
 from fastapi.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
@@ -31,9 +32,7 @@ app.include_router(
 
 @app.get("/")
 def get_base_page(request: Request):
-    return templates.TemplateResponse("base.html", {"request": request})
-
-
+    return templates.TemplateResponse("menu.html", {"request": request})
 
 
 

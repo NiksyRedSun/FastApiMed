@@ -1,0 +1,38 @@
+{% extends "base.html"%}
+
+
+
+{% block content %}
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/town_square.png') }}" alt="Площадь">
+        <a class="menu" href="">Площадь</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/war_house.png') }}" alt="Казармы">
+        <a class="menu" href="">Казармы</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/market.png') }}" alt="Рынок">
+        <a class="menu" href="">Рынок</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/bar.png') }}" alt="Таверна">
+        <a class="menu" href="">Таверна</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/fields.png') }}" alt="Поля">
+        <a class="menu" href="">Поля</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/wood_house.png') }}" alt="Дом дровосека">
+        <a class="menu" href="">Дом дровосека</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/hunter_house.png') }}" alt="Лачуга охотника">
+        <a class="menu" href="">Лачуга охотника</a>
+    </div>
+    <div class="post">
+        <img src="{{ url_for('static', path='images/cards/256/tower.png') }}" alt="Сторожевая башня">
+        <a class="menu" href="">Сторожевая башня</a>
+    </div>
+{% endblock %}
