@@ -36,6 +36,34 @@ div.post.char{
     width: 35%;
 }
 
+div.in_menu_point{
+    margin: 3% 1% 3% 1%;
+    width: 70%;
+    border: solid #b87333 6pt;
+    border-radius: 45px;
+    background-color: #c39964;
+    display: inline-block;
+    text-align: left;
+    font-family: "MedievalSharp", cursive;
+    padding: 2% 5% 5% 2%;
+
+}
+
+div.in_menu_point img{
+    border-radius: 35px;
+    border: solid #b87333 6pt;
+    width: 13.5%;
+    display: inline-block;
+}
+
+div.in_menu_point_block{
+    display: inline-block;
+    padding: 0% 0% 0% 2%;
+    vertical-align:top;
+    width: 80%;
+    margin-top: -2%;
+}
+
 div.flMsg.success{
     font-size: 20px;
     font-weight: bold;
@@ -214,6 +242,7 @@ main {
     border: solid white 5pt;
     padding-bottom: 1%;
     text-align: center;
+
 }
 
 
@@ -258,30 +287,26 @@ a.menu{
     font-family: "MedievalSharp", cursive;
 }
 
-
 a.menu:hover{
-    font-size: 30pt;
-    font-weight: bold;
-    text-decoration: none;
-    color: #b87333;
-    font-family: "MedievalSharp", cursive;
+    color: #cd7f32;
 }
 
 
+div.menu_par_name{
+    width: 100%;
+    text-align: left;
+    font-size: 8vh;
+}
 
-/*.sign-wrap-1 {*/
-/*    text-align: center;*/
-/*    padding: 50px;*/
-/*}*/
+div.menu_par_lvl{
+    width: 80%;
+    text-align: left;
+    font-size: 4vh;
+}
 
-/*.sign-wrap-1 .sign_word {*/
-/*    font-size: 95px;*/
-/*    font-weight: bold;*/
-/*    line-height: 50px;*/
-/*    color: #FFF;*/
-/*    font-family: 'Ubuntu Mono', monospace;*/
-/*    text-transform: uppercase;*/
-/*    letter-spacing: 4pt;*/
-/*}*/
-
-
+div.menu_par_descr{
+    width: 100%;
+    text-align: left;
+    font-size: 4vh;
+    padding-top: 1%;
+}

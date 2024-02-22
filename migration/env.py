@@ -3,6 +3,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 from app.auth.models import *
+from app.menu.models import *
 from app.config import DB_PATH
 
 
