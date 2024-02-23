@@ -2,30 +2,43 @@ body {
     background-color: #8d6644;
     background-image: url("sitefon.png");
     background-size: cover;
-    background-repeat: no-repeat;
-
+    background-attachment: fixed;
+    width: 1300px;
+    margin: 0 auto;
+    overflow-x: auto;
 }
 
 
-div.post{
+a.post{
     margin: 3% 1% 3% 1%;
-    width: 25%;
+    width: 25.5%;
     border: solid #b87333 6pt;
     border-radius: 45px;
     background-color: #c39964;
     text-align: center;
     padding-bottom: 1%;
     display: inline-block;
-
+    text-decoration: none;
+    color: #555555;
+    font-family: "MedievalSharp", cursive;
+    font-size: 3.5vh;
+    font-weight: bolder;
+    transition: all, 0.3s, ease, 0.3s;
 }
 
-div.post img{
+a.post:hover{
+    color: #cd7f32;
+}
+
+a.post img{
     margin: 10% 5% 0.5% 5%;
-    /*border: solid #0a1237 6pt;*/
     border-radius: 45px;
     border: solid #b87333 6pt;
     width: 80%;
+}
 
+a.post > p {
+    margin: 0% 0% 0% 0%;
 }
 
 div.post.char{
@@ -38,7 +51,7 @@ div.post.char{
 
 div.in_menu_point{
     margin: 3% 1% 3% 1%;
-    width: 70%;
+    width: 73.5%;
     border: solid #b87333 6pt;
     border-radius: 45px;
     background-color: #c39964;
@@ -237,11 +250,12 @@ div.form {
 }
 
 main {
-    margin: -1% 15%;
+    margin: -1% auto;
     background-color: #f9e3be;
     border: solid white 5pt;
     padding-bottom: 1%;
     text-align: center;
+    width: 1300px;
 
 }
 
@@ -257,7 +271,7 @@ nav {
 a.topmenu{
     padding: 0% 5%;
     width: 50%;
-    font-size: 30pt;
+    font-size: 5vh;
     font-weight: bolder;
     text-decoration: none;
     background-color: #f9e3be;
@@ -269,25 +283,6 @@ a.topmenu{
 
 
 a.topmenu:hover{
-    font-size: 30pt;
-    font-weight: bold;
-    text-decoration: none;
-    color: #cd7f32;
-    font-family: "MedievalSharp", cursive;
-    text-align: center;
-}
-
-
-a.menu{
-    font-size: 30pt;
-    font-weight: bolder;
-    text-decoration: none;
-    color: #555555;
-    transition: all, 0.3s, ease, 0.3s;
-    font-family: "MedievalSharp", cursive;
-}
-
-a.menu:hover{
     color: #cd7f32;
 }
 
