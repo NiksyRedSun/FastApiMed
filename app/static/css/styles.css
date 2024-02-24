@@ -2,7 +2,7 @@ body {
     background-color: #8d6644;
     background-image: url("sitefon.png");
     background-size: cover;
-    background-attachment: fixed;
+    /*background-attachment: fixed;*/
     width: 1300px;
     margin: 0 auto;
     overflow-x: auto;
@@ -27,7 +27,7 @@ a.post{
 }
 
 a.post:hover{
-    color: #cd7f32;
+    color: #ffd700;
 }
 
 a.post img{
@@ -261,28 +261,47 @@ main {
 
 
 nav {
+    border-bottom: solid white 5pt;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div.navblock {
+    text-align: center;
+    padding: 0% 0% 0% 0%;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.navblock:first-of-type {
+    padding: 2% 0% 0% 0%;
+}
+
+div.navblock > table {
+    text-align: center;
+    font-size: 2.5vh;
+    font-weight: bolder;
+    text-decoration: none;
+    color: #555555;
+    font-family: "MedievalSharp", cursive;
 }
 
 
-a.topmenu{
-    padding: 0% 5%;
-    width: 50%;
+div.navblock > a{
     font-size: 5vh;
     font-weight: bolder;
     text-decoration: none;
-    background-color: #f9e3be;
     color: #555555;
     transition: all, 0.3s, ease, 0.3s;
     font-family: "MedievalSharp", cursive;
-    text-align: center;
 }
 
 
-a.topmenu:hover{
+div.navblock > a:hover{
     color: #cd7f32;
 }
 
@@ -304,4 +323,24 @@ div.menu_par_descr{
     text-align: left;
     font-size: 4vh;
     padding-top: 1%;
+}
+
+img.res {
+    width: 30%;
+    border: solid #c02000 3.5pt;
+    border-radius: 10px;
+}
+
+td.image {
+    width: 12.5%;
+}
+
+td.num {
+    font-size: 4vh;
+    width: 12.5%;
+    text-align: left;
+}
+
+table.res {
+    width: 100%;
 }
