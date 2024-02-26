@@ -18,12 +18,11 @@ router = APIRouter(
 async def get_menu_item(request: Request, slug: str, session: AsyncSession = Depends(get_async_session)):
     try:
         pre_result = await session.execute(select(Menu).where(Menu.slug==slug))
-        # запомни, ебучий sqlalch всегда возвращает кортеж, поэтому в дальнейшем нужно обращаться именно к одному элементну
+        # запомни, sqlalch всегда возвращает кортеж, поэтому в дальнейшем нужно обращаться именно к одному элементу
         result = pre_result.fetchone()
         return templates.TemplateResponse("menu_item.html", {"request": request, "menu_par": result[0]})
 
     except Exception as e:
-        # Передать любую ошибку разработчикам
         return {
             "status": "error",
             "data": e,

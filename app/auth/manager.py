@@ -9,6 +9,7 @@ from .utils import get_user_db
 from ..config import SECRET_AUTH
 
 
+# Класс пересоздан и унаследован, раньше это нужно было, чтобы можно было добавить роль игроку, теперь просто так
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     reset_password_token_secret = SECRET_AUTH
     verification_token_secret = SECRET_AUTH

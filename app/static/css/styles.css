@@ -77,30 +77,19 @@ div.in_menu_point_block{
     margin-top: -2%;
 }
 
-div.flMsg.success{
-    font-size: 20px;
+p.success{
+    font-size: 3vh;
     font-weight: bold;
-    padding-left: 3%;
     color: #176955;
-    font-family: 'Ubuntu Mono', monospace;
+    margin-top: 1%;
 }
 
-div.flMsg.error{
+p.error{
     font-size: 20px;
     font-weight: bold;
     padding-left: 3%;
     color: #69172b;
-    font-family: 'Ubuntu Mono', monospace;
 }
-
-
-div.flMsg.errorInv{
-    font-size: 20px;
-    font-weight: bold;
-    color: #69172b;
-    font-family: 'Ubuntu Mono', monospace;
-}
-
 
 
 div.nickname{
