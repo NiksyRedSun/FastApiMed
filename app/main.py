@@ -1,20 +1,32 @@
 import json
-
+from sqlalchemy import select, insert
 import uvicorn
 from fastapi import APIRouter, Request, Depends, FastAPI, Form
 from fastapi.responses import RedirectResponse
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from .auth.models import User
+from .database import get_async_session
 from .auth.base_config import auth_backend, fastapi_users
 from .auth.schemas import UserRead, UserCreate
 from .menu.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from .config import templates
 import requests
+from pydantic import ValidationError
 
 
 
 
 # если все валидно, то эта функция вернет True, если нет, то вернет строку
-def validation(email: str, user: str, password: str, password2: str):
+async def validation(email: str, user: str, password: str, password2: str, session):
+    query = select(User).where(User.username == user)
+    pre_result = await session.execute(query)
+    result = pre_result.fetchall()
+    if result:
+        return "Пользователь с таким именем уже существует"
+    if not email or not user or not password or not password2:
+        return "Заполните все поля формы"
     if email[-3:] != '.ru' or '@' not in email:
         return "Мейл не соответствует правилам"
     if password != password2:
@@ -54,7 +66,6 @@ def get_menu(request: Request):
 
 @app.get("/login")
 def login_get(request: Request, message: str = None, message_class: str = None):
-
     return templates.TemplateResponse("login.html", {"request": request, "message": message, "message_class": message_class})
 
 @app.post("/login")
@@ -63,17 +74,18 @@ def login_post(request: Request, message=None):
 
 
 @app.get("/register")
-def register_get(request: Request):
-    return templates.TemplateResponse("reg.html", {"request": request})
+def register_get(request: Request, message: str = None, message_class: str = None):
+    return templates.TemplateResponse("reg.html", {"request": request, "message": message, "message_class": message_class})
 
 
 # Конечно костыль пздц, но ничего другого я пока не придумал
 @app.post("/register")
-def register_post(request: Request, email: str = Form(...), password: str = Form(...), sec_password: str = Form(...), username: str = Form(...)):
+async def register_post(request: Request, email: str = Form(default=''), password: str = Form(default=''), sec_password: str = Form(default=''),
+                  username: str = Form(default=''), session: AsyncSession = Depends(get_async_session)):
     try:
-        res = validation(email, username, password, sec_password)
+        res = await validation(email, username, password, sec_password, session)
         if type(res) != str:
-            data={
+            data = {
                   "email": email,
                   "password": password,
                   "is_active": True,
@@ -82,10 +94,26 @@ def register_post(request: Request, email: str = Form(...), password: str = Form
                   "username": username
                 }
 
-            r = requests.request("POST", data=json.dumps(data), url=str(request.base_url)[:-1] + app.url_path_for('register:register'))
-            return RedirectResponse(request.url_for('login_get').include_query_params(message='Регистрация успешна', message_class='success'))
+            r = requests.post(data=json.dumps(data),
+                                 url=str(request.base_url)[:-1] + app.url_path_for('register:register'),
+                                 allow_redirects=True, timeout=3)
+            if r.status_code != 400:
+                print("До сюда доходит")
+                return RedirectResponse(request.url_for('login_get').include_query_params(message='Регистрация успешна', message_class='success'), status_code=302)
+            else:
+                return RedirectResponse(
+                    request.url_for('register_get').include_query_params(message='Пользователь с таким мылом уже существует', message_class='error'),
+                    status_code=302)
+        else:
+            return RedirectResponse(request.url_for('register_get').include_query_params(message=res, message_class='error'), status_code=302)
     except:
-        pass
+        return {
+            "status": "error",
+            "data": ":(",
+            "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+        }
 
 app.include_router(router_menu)
+
+
 # uvicorn app.main:app --reload

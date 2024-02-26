@@ -11,5 +11,8 @@
             <p class="linename">Повтор пароля:</p><input name="sec_password" type="text">
         <input type="submit" class="subm">
         </form>
+        {% if message is not none %}
+        <p class="{{ request.query_params.get('message_class') }}">{{ message }}</p>
+        {% endif %}
     </div>
 {% endblock %}

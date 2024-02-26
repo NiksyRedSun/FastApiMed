@@ -28,6 +28,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         await self.validate_password(user_create.password, user_create)
 
         existing_user = await self.user_db.get_by_email(user_create.email)
+
         if existing_user is not None:
             raise exceptions.UserAlreadyExists()
 

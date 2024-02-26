@@ -58,7 +58,7 @@ div.in_menu_point{
     display: inline-block;
     text-align: left;
     font-family: "MedievalSharp", cursive;
-    padding: 2% 5% 5% 2%;
+    padding: 2% 5% 1% 2%;
 
 }
 
@@ -82,12 +82,14 @@ p.success{
     font-weight: bold;
     color: #176955;
     margin-top: 1%;
+    margin-bottom: 1%;
 }
 
 p.error{
-    font-size: 20px;
+    font-size: 3vh;
     font-weight: bold;
-    padding-left: 3%;
+    margin-top: 1%;
+    margin-bottom: 1%;
     color: #69172b;
 }
 
@@ -180,7 +182,8 @@ input {
     font-size: 30px;
 }
 input.subm {
-    margin-top: 2%;
+    margin-top: 4%;
+
 }
 
 
