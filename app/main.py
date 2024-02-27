@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import APIRouter, Request, Depends, FastAPI, Form
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-
+import aiohttp
 from .auth.models import User
 from .database import get_async_session
 from .auth.base_config import auth_backend, fastapi_users
@@ -12,6 +12,7 @@ from .auth.schemas import UserRead, UserCreate
 from .menu.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from .config import templates
+
 import requests
 from pydantic import ValidationError
 
@@ -94,11 +95,11 @@ async def register_post(request: Request, email: str = Form(default=''), passwor
                   "username": username
                 }
 
-            r = requests.post(data=json.dumps(data),
-                                 url=str(request.base_url)[:-1] + app.url_path_for('register:register'),
-                                 allow_redirects=True, timeout=3)
-            if r.status_code != 400:
-                print("До сюда доходит")
+            async with aiohttp.ClientSession() as session:
+                response = await session.post(str(request.base_url)[:-1] + app.url_path_for('register:register'), json=data)
+
+            # r = requests.request("POST", data=json.dumps(data), url=str(request.base_url)[:-1] + app.url_path_for('register:register'), allow_redirects=True)
+            if response.status != 400:
                 return RedirectResponse(request.url_for('login_get').include_query_params(message='Регистрация успешна', message_class='success'), status_code=302)
             else:
                 return RedirectResponse(
@@ -112,6 +113,8 @@ async def register_post(request: Request, email: str = Form(default=''), passwor
             "data": ":(",
             "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
         }
+
+
 
 app.include_router(router_menu)
 
