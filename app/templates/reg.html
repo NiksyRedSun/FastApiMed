@@ -7,8 +7,8 @@
         <form action="{{ url_for('register_post')}}" enctype="multipart/form-data" method="post">
             <p class="linename">Мэйл:</p><input name="email" type="text">
             <p class="linename">Имя пользователя:</p><input name="username" type="text">
-            <p class="linename">Пароль:</p><input name="password" type="text">
-            <p class="linename">Повтор пароля:</p><input name="sec_password" type="text">
+            <p class="linename">Пароль:</p><input name="password" type="password">
+            <p class="linename">Повтор пароля:</p><input name="sec_password" type="password">
         <input type="submit" class="subm">
         </form>
         {% if message is not none %}

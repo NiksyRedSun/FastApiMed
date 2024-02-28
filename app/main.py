@@ -1,17 +1,18 @@
 import json
 from sqlalchemy import select, insert
 import uvicorn
-from fastapi import APIRouter, Request, Depends, FastAPI, Form
+from fastapi import APIRouter, Request, Depends, FastAPI, Form, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import aiohttp
 from .auth.models import User
 from .database import get_async_session
-from .auth.base_config import auth_backend, fastapi_users
+from .auth.base_config import auth_backend, fastapi_users, current_user
 from .auth.schemas import UserRead, UserCreate
 from .menu.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from .config import templates
+from .auth.utils import get_user_db
 
 import requests
 from pydantic import ValidationError
@@ -19,8 +20,8 @@ from pydantic import ValidationError
 
 
 
-# если все валидно, то эта функция вернет True, если нет, то вернет строку
-async def validation(email: str, user: str, password: str, password2: str, session):
+# если все валидно, то эти функции вернут True, если нет, то вернут строку
+async def validation_reg(email: str, user: str, password: str, password2: str, session):
     query = select(User).where(User.username == user)
     pre_result = await session.execute(query)
     result = pre_result.fetchall()
@@ -35,6 +36,8 @@ async def validation(email: str, user: str, password: str, password2: str, sessi
     if len(password) < 8:
         return 'Пароль должен содержать хотя бы 8 символов'
     return True
+
+
 
 
 
@@ -60,18 +63,62 @@ app.include_router(
 )
 
 
+
+
+
 @app.get("/")
-def get_menu(request: Request):
-    return templates.TemplateResponse("menu.html", {"request": request})
+def get_menu(request: Request, user: User | None = Depends(current_user)):
+    try:
+        if user is None:
+            return RedirectResponse(request.url_for('login_get'), status_code=302)
+        else:
+            return templates.TemplateResponse("menu.html", {"request": request})
+    except:
+        return {
+            "status": "error",
+            "data": ":(",
+            "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+        }
 
 
 @app.get("/login")
 def login_get(request: Request, message: str = None, message_class: str = None):
     return templates.TemplateResponse("login.html", {"request": request, "message": message, "message_class": message_class})
 
+
 @app.post("/login")
-def login_post(request: Request, message=None):
-    return templates.TemplateResponse("login.html", {"request": request, "message": message})
+async def login_post(request: Request, email: str = Form(default=''), password: str = Form(default='')):
+    try:
+
+        async with aiohttp.ClientSession() as session:
+            response = await session.post(
+                url=f'{request.base_url}auth/jwt/login',
+                headers={
+                    'accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                data={
+                    'username': email,
+                    'password': password
+                },
+            )
+        if response.status == 400:
+            return RedirectResponse(request.url_for('login_get').include_query_params(
+                    message='Неправильный логин или пароль', message_class='error'),
+                status_code=302)
+
+        redirect = RedirectResponse(url=f'{request.base_url}', status_code=302)
+        redirect.set_cookie(key='authepta', value=response.cookies.get('authepta'), httponly=True)
+
+        return redirect
+
+    except:
+        return {
+            "status": "error",
+            "data": ":(",
+            "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+        }
+
 
 
 @app.get("/register")
@@ -84,7 +131,7 @@ def register_get(request: Request, message: str = None, message_class: str = Non
 async def register_post(request: Request, email: str = Form(default=''), password: str = Form(default=''), sec_password: str = Form(default=''),
                   username: str = Form(default=''), session: AsyncSession = Depends(get_async_session)):
     try:
-        res = await validation(email, username, password, sec_password, session)
+        res = await validation_reg(email, username, password, sec_password, session)
         if type(res) != str:
             data = {
                   "email": email,
