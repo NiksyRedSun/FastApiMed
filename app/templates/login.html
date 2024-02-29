@@ -11,6 +11,8 @@
         </form>
         {% if message is not none %}
         <p class="{{ request.query_params.get('message_class') }}">{{ message }}</p>
+        {% else %}
+        <p class="linename">Еще не <a href="{{ url_for('register_get')}}">зарегистрированы</a>?</p>
         {% endif %}
     </div>
 {% endblock %}
