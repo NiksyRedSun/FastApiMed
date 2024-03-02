@@ -13,6 +13,8 @@ router = APIRouter(
     tags=["Menu"]
 )
 
+
+
 #
 @router.get("/{slug}")
 async def get_menu_item(request: Request, slug: str, session: AsyncSession = Depends(get_async_session)):
