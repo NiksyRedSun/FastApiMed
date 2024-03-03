@@ -28,7 +28,7 @@ class Knight(Base):
     agility = Column("agility", Integer)
     hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
-    user = relationship("User", back_populates='knight')
+    # user = relationship("User", back_populates='knight')
 
 
 
@@ -42,7 +42,7 @@ class Archer(Base):
     agility = Column("agility", Integer)
     hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
-    user = relationship("User", back_populates='archer')
+    # user = relationship("User", back_populates='archer')
 
 
 class Peasant(Base):
@@ -56,7 +56,7 @@ class Peasant(Base):
     hp = Column("hp", Integer)
     on_duty = Column("on_duty", Boolean)
     max_hp = Column("max_hp", Integer)
-    user = relationship("User", back_populates='peasant')
+    # user = relationship("User", back_populates='peasant')
 
 
 class WoodHouse(Base):

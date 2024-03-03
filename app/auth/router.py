@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from fastapi import APIRouter, Request, Depends, FastAPI, Form, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,7 +6,8 @@ import aiohttp
 from .models import User
 from ..database import get_async_session
 from ..config import templates, base_url
-
+from app.levels.models import *
+from sqlalchemy.orm import selectinload
 
 
 router = APIRouter(
@@ -84,9 +85,9 @@ def register_get(request: Request, message: str = None, message_class: str = Non
 # Конечно костыль пздц, но ничего другого я пока не придумал
 @router.post("/register")
 async def register_post(request: Request, email: str = Form(default=''), password: str = Form(default=''), sec_password: str = Form(default=''),
-                  username: str = Form(default=''), session: AsyncSession = Depends(get_async_session)):
-    try:
-        res = await validation_reg(email, username, password, sec_password, session)
+                  username: str = Form(default=''), sqlsession: AsyncSession = Depends(get_async_session)):
+    # try:
+        res = await validation_reg(email, username, password, sec_password, sqlsession)
         if type(res) != str:
             data = {
                   "email": email,
@@ -101,6 +102,21 @@ async def register_post(request: Request, email: str = Form(default=''), passwor
                 response = await session.post(str(request.url_for('register:register')), json=data)
 
             if response.status != 400:
+                res = await response.json()
+
+                inv = Inventory(user_id=res['id'])
+                wood_house = WoodHouse(user_id=res['id'])
+                hunter_house = HunterHouse(user_id=res['id'])
+                fields = Fields(user_id=res['id'])
+
+                sqlsession.add(inv)
+                sqlsession.add(wood_house)
+                sqlsession.add(hunter_house)
+                sqlsession.add(fields)
+
+                await sqlsession.commit()
+                await sqlsession.close()
+
                 return RedirectResponse(request.url_for('login_get').include_query_params(message='Регистрация успешна', message_class='success'), status_code=302)
             else:
                 return RedirectResponse(
@@ -108,10 +124,10 @@ async def register_post(request: Request, email: str = Form(default=''), passwor
                     status_code=302)
         else:
             return RedirectResponse(request.url_for('register_get').include_query_params(message=res, message_class='error'), status_code=302)
-    except:
-        return {
-            "status": "error",
-            "data": ":(",
-            "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
-        }
+    # except:
+    #     return {
+    #         "status": "error",
+    #         "data": ":(",
+    #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+    #     }
 
