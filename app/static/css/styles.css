@@ -285,8 +285,8 @@ div.menu_par_lvl{
 
 div.menu_par_descr{
     width: 100%;
-    text-align: left;
-    font-size: 4vh;
+    text-align: justify;
+    font-size: 2.75vh;
     padding-top: 1%;
 }
 

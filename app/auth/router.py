@@ -1,3 +1,5 @@
+import asyncio
+
 from sqlalchemy import select, update
 from fastapi import APIRouter, Request, Depends, FastAPI, Form, status
 from fastapi.responses import RedirectResponse
@@ -8,7 +10,7 @@ from ..database import get_async_session
 from ..config import templates, base_url
 from app.levels.models import *
 from sqlalchemy.orm import selectinload
-
+from app.gameplay.gameplay import GamePlay, gameplays
 
 router = APIRouter(
     prefix="/dib_auth",
@@ -25,13 +27,39 @@ async def validation_reg(email: str, user: str, password: str, password2: str, s
         return "Пользователь с таким именем уже существует"
     if not email or not user or not password or not password2:
         return "Заполните все поля формы"
-    if email[-3:] != '.ru' or '@' not in email:
-        return "Мейл не соответствует правилам"
+    # if email[-3:] != '.ru' or '@' not in email:
+    #     return "Мейл не соответствует правилам"
     if password != password2:
         return "Пароли не совпадают"
     if len(password) < 8:
         return 'Пароль должен содержать хотя бы 8 символов'
     return True
+
+
+
+async def tables_for_user(id, session):
+    async with session:
+        inv = Inventory(user_id=id)
+        wood_house = WoodHouse(user_id=id)
+        hunter_house = HunterHouse(user_id=id)
+        fields = Fields(user_id=id)
+        town_square = TownSquare(user_id=id)
+        war_house = WarHouse(user_id=id)
+        market = Market(user_id=id)
+        tower = Tower(user_id=id)
+        bar = Bar(user_id=id)
+
+        session.add(inv)
+        session.add(wood_house)
+        session.add(hunter_house)
+        session.add(fields)
+        session.add(town_square)
+        session.add(war_house)
+        session.add(market)
+        session.add(tower)
+        session.add(bar)
+
+        await session.commit()
 
 
 
@@ -103,19 +131,13 @@ async def register_post(request: Request, email: str = Form(default=''), passwor
 
             if response.status != 400:
                 res = await response.json()
+                user_id = res['id']
 
-                inv = Inventory(user_id=res['id'])
-                wood_house = WoodHouse(user_id=res['id'])
-                hunter_house = HunterHouse(user_id=res['id'])
-                fields = Fields(user_id=res['id'])
+                await tables_for_user(user_id, sqlsession)
 
-                sqlsession.add(inv)
-                sqlsession.add(wood_house)
-                sqlsession.add(hunter_house)
-                sqlsession.add(fields)
-
-                await sqlsession.commit()
-                await sqlsession.close()
+                # gameplays[user_id] = GamePlay(user_id)
+                # loop = asyncio.get_event_loop()
+                # loop.create_task(gameplays[user_id].make_money())
 
                 return RedirectResponse(request.url_for('login_get').include_query_params(message='Регистрация успешна', message_class='success'), status_code=302)
             else:

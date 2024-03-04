@@ -5,7 +5,7 @@
 {% block content %}
     <div class="in_menu_point">
         <form action="{{ url_for('login_post')}}" enctype="multipart/form-data" method="post">
-            <p class="linename">Мэйл:</p><input name="email" type="text">
+            <p class="linename">Мэйл:</p><input name="email" type="email">
             <p class="linename">Пароль:</p><input name="password" type="password">
         <input type="submit" class="subm">
         </form>

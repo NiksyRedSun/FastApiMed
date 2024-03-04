@@ -25,6 +25,11 @@ class User(Base):
     wood_house: Mapped[WoodHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     fields: Mapped[Fields] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     hunter_house: Mapped[HunterHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
+    town_square: Mapped[TownSquare] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
+    war_house: Mapped[WarHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
+    bar: Mapped[Bar] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
+    market: Mapped[Market] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
+    tower: Mapped[Tower] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
 
 
 

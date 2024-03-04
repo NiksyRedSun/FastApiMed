@@ -8,6 +8,7 @@ from app.menu.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from app.config import templates
 from app.auth.router import router as auth_router
+import nest_asyncio
 
 
 
@@ -57,5 +58,7 @@ app.include_router(auth_router)
 # uvicorn app.main:app --reload
 
 if __name__ == "__main__":
+    # nest_asyncio.apply()
     uvicorn.run(app, host="127.0.0.1", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=8000)
 

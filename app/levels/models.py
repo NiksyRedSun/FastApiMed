@@ -45,6 +45,7 @@ class Archer(Base):
     # user = relationship("User", back_populates='archer')
 
 
+
 class Peasant(Base):
     __tablename__ = "peasant"
 
@@ -59,6 +60,7 @@ class Peasant(Base):
     # user = relationship("User", back_populates='peasant')
 
 
+
 class WoodHouse(Base):
     __tablename__ = "wood_house"
 
@@ -66,9 +68,12 @@ class WoodHouse(Base):
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
-    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=5)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=300)
+    time_for_res_pack = Column("time_for_res_pack", Integer, default=1200)
     res_per_worker = Column("res_per_worker", Float, default=1)
+    workers = Column("workers", Integer, default=0)
     user = relationship("User", back_populates='wood_house')
+
 
 
 class Fields(Base):
@@ -78,9 +83,12 @@ class Fields(Base):
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
-    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=5)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=300)
+    time_for_res_pack = Column("time_for_res_pack", Integer, default=1200)
     res_per_worker = Column("res_per_worker", Float, default=1)
+    workers = Column("workers", Integer, default=0)
     user = relationship("User", back_populates='fields')
+
 
 
 class HunterHouse(Base):
@@ -90,7 +98,86 @@ class HunterHouse(Base):
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
-    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=5)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=300)
+    time_for_res_pack = Column("time_for_res_pack", Integer, default=1200)
     res_per_worker = Column("res_per_worker", Float, default=1)
+    workers = Column("workers", Integer, default=0)
     user = relationship("User", back_populates='hunter_house')
+
+
+
+class TownSquare(Base):
+    __tablename__ = "town_square"
+
+    id = Column("id", Integer, primary_key=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    cur_level = Column("cur_level", Integer, default=1)
+    money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
+    wheat_for_next_lvl = Column("wheat_for_next_lvl", Integer, default=100)
+    wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=100)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=300)
+    time_for_peasant = Column("time_for_peasant", Integer, default=300)
+    # пока что ставим 5 минут чисто потестить
+    time_for_money_pack = Column("time_for_money_pack", Integer, default=300)
+    money_per_peasant = Column("money_per_peasant", Float, default=1)
+    peasants_in_city = Column("peasants_in_city", Integer, default=0)
+    max_peasants = Column("max_peasants", Integer, default=100)
+    user = relationship("User", back_populates='town_square')
+
+
+class WarHouse(Base):
+    __tablename__ = "war_house"
+
+    id = Column("id", Integer, primary_key=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    cur_level = Column("cur_level", Integer, default=1)
+    money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
+    skins_for_next_lvl = Column("skins_for_next_lvl", Integer, default=100)
+    wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=100)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=300)
+    time_for_knight = Column("time_for_knight", Integer, default=300)
+    max_knights = Column("max_knights", Integer, default=50)
+    user = relationship("User", back_populates='war_house')
+
+
+class Bar(Base):
+    __tablename__ = "bar"
+
+    id = Column("id", Integer, primary_key=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    cur_level = Column("cur_level", Integer, default=1)
+    money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
+    skins_for_next_lvl = Column("skins_for_next_lvl", Integer, default=100)
+    wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=100)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=300)
+    time_for_archer = Column("time_for_archer", Integer, default=300)
+    max_archers = Column("max_archers", Integer, default=50)
+    user = relationship("User", back_populates='bar')
+
+
+class Market(Base):
+    __tablename__ = "market"
+
+    id = Column("id", Integer, primary_key=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    cur_level = Column("cur_level", Integer, default=1)
+    money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
+    skins_for_next_lvl = Column("skins_for_next_lvl", Integer, default=100)
+    wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=100)
+    wheat_for_next_lvl = Column("wheat_for_next_lvl", Integer, default=100)
+    taxes = Column("taxes", Float, default=15)
+    user = relationship("User", back_populates='market')
+
+
+class Tower(Base):
+    __tablename__ = "tower"
+
+    id = Column("id", Integer, primary_key=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    cur_level = Column("cur_level", Integer, default=1)
+    money_for_next_lvl = Column("money_for_next_lvl", Integer, default=100)
+    wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=100)
+    user = relationship("User", back_populates='tower')
+
+
 
