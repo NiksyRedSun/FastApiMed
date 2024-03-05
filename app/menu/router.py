@@ -56,7 +56,7 @@ async def get_menu_item(request: Request, slug: str, session: AsyncSession = Dep
         if user is None:
             return RedirectResponse(request.url_for('login_get'), status_code=302)
         else:
-            return templates.TemplateResponse("menu_item.html", {"request": request, "menu_par": level_info[slug]})
+            return templates.TemplateResponse(f"menu_items/{slug}.html", {"request": request, "menu_par": level_info[slug]})
 
 
     except Exception as e:
