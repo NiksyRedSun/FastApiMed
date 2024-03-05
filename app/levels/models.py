@@ -121,7 +121,7 @@ class TownSquare(Base):
     time_for_money_pack = Column("time_for_money_pack", Integer, default=300)
     money_per_peasant = Column("money_per_peasant", Float, default=1)
     peasants_in_city = Column("peasants_in_city", Integer, default=0)
-    max_peasants = Column("max_peasants", Integer, default=100)
+    max_peasants = Column("max_peasants", Integer, default=150)
     user = relationship("User", back_populates='town_square')
 
 

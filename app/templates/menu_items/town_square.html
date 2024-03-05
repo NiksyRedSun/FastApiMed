@@ -3,6 +3,7 @@
 
 
 {% block menu_content %}
+
 <div class="stat_info">
     <div class="menu_par_info">Всего горожан: 0</div>
     <div class="menu_par_info">Максимум горожан: 100</div>
@@ -14,17 +15,5 @@
     <div class="menu_par_info">До следующего горожанина 4 минуты</div>
     <div class="menu_par_info">До следующего сбора налогов 5 минут</div>
 </div>
-<div class="upgrade">
-    <div>Улучшить за</div>
-   <img src="{{ url_for('static', path='images/res/money.png') }}" alt="Монеты">
-    <div class="num">0</div>
-    <img src="{{ url_for('static', path='images/res/wood.png') }}" alt="Дерево">
-    <div class="num">0</div>
-    <img src="{{ url_for('static', path='images/res/wheat.png') }}" alt="Пшено">
-    <div class="num">0</div>
-    <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Шкуры">
-    <div class="num">0</div>
-    <div>05:00</div>
-    <a>Улучшить</a>
-</div>
+
 {% endblock %}
