@@ -6,7 +6,7 @@ from .manager import get_user_manager
 from .models import User
 from ..config import SECRET_AUTH
 
-cookie_transport = CookieTransport(cookie_name="authepta", cookie_max_age=3600)
+cookie_transport = CookieTransport(cookie_name="authepta", cookie_max_age=40000)
 
 
 def get_jwt_strategy() -> JWTStrategy:
