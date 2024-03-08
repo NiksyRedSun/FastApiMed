@@ -21,7 +21,7 @@ class User(Base):
     inventory: Mapped[Inventory] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     knights: Mapped[List[Knight]] = relationship()
     archers: Mapped[List[Archer]] = relationship()
-    peasants: Mapped[List[Peasant]] = relationship()
+    citizens: Mapped[List[Citizen]] = relationship()
     wood_house: Mapped[WoodHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     fields: Mapped[Fields] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     hunter_house: Mapped[HunterHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)

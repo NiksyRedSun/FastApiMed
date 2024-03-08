@@ -2,7 +2,6 @@
 
 {% macro cit_set(pers_img, pers_name) %}
 
-<div class="set_title">Работники</div>
 <form class="cit_set">
 <div class="cit_set_level1">
     <div class="person_and_num">
@@ -11,7 +10,7 @@
     </div>
         <input type="range" min="0" max="100" value="50" id="slider" class="width100">
     <div class="person_and_num">
-        <img src="{{ url_for('static', path=pers_img) }}" alt={{ pers_name }}>
+        <img src="{{ url_for('static', path=pers_img) }}" alt="{{ pers_name }}">
         <input type="number" min="0" max="100" value="50" class="input-value" id="right-value">
     </div>
 </div>

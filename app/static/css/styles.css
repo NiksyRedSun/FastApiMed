@@ -59,7 +59,7 @@ div.in_menu_point{
     display: inline-block;
     text-align: left;
     font-family: "MedievalSharp", cursive;
-    padding: 2% 2% 1% 2%;
+    padding: 2% 2% 2% 2%;
 
 }
 
@@ -331,6 +331,7 @@ div.menu_par_descr{
 
 div.stat_info {
     font-size: 25pt;
+    margin-bottom: 2%;
 }
 
 
@@ -374,11 +375,12 @@ div.set_title {
     font-size: 30pt;
     color: #591038;
     font-weight: bold;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 div.in_time_info {
     color: #591038;
-    margin-top: 2%;
     font-size: 25pt;
 }
 
