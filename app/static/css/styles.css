@@ -28,6 +28,7 @@ a.post{
 
 a.post:hover{
     color: #ffd700;
+    transform: translateY(-7%);
 }
 
 a.post img{
@@ -166,7 +167,7 @@ div.post + div.sign-wrap-3 {
 p.linename {
     font-size: 30px;
     font-weight: bold;
-    color: #203c93;
+    color: #591038;
     margin-block-end: 0px;
     margin-block-start: 0px;
     padding-bottom: 1%;
@@ -176,17 +177,60 @@ p.linename {
 
 
 input {
-    margin-block-end: 0px;
-    margin-block-start: 0px;
-    color: #203c93;
-    font-size: 30px;
+    color: #591038;
+    font-size: 25pt;
 }
+
+input.width100 {
+    width: 100%;
+}
+
+
+
 input.subm {
     margin-top: 4%;
-
 }
 
+form.cit_set {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
+div.cit_set_level1 {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+div.cit_set_level2 {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2%;
+}
+
+div.person_and_num {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.person_and_num img {
+    border-radius: 10px;
+    border: solid #591038 5pt;
+    width: 70%;
+    align-self: center;
+    margin-bottom: 3%;
+}
+
+div.person_and_num input {
+    width: 40%;
+    align-self: center;
+}
 
 form {
     width: 50%;
@@ -322,6 +366,14 @@ div.res {
     flex-direction: row;
     justify-content: center;
     margin-left: 13%;
+}
+
+div.set_title {
+    width: 100%;
+    text-align: center;
+    font-size: 30pt;
+    color: #591038;
+    font-weight: bold;
 }
 
 div.in_time_info {

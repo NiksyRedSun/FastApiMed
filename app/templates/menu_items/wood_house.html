@@ -10,40 +10,13 @@
     <div class="menu_par_info">Дерева со всех работников: 0</div>
 </div>
 <div class="in_time_info">
-    <div class="menu_par_info">До следующей проверки ловушек</div>
-</div>
-
-<div class="slider-container">
-    <input type="number" min="0" max="100" value="50" class="input-value" id="left-value">
-    <input type="range" min="0" max="100" value="50" id="slider">
-    <input type="number" min="0" max="100" value="50" class="input-value" id="right-value">
+    <div class="menu_par_info">До следующей проверки ловушек 4 минуты</div>
 </div>
 
 
+{% from "menu_items/citizen_set_block.html" import cit_set with context %}
 
-<script>
-    const slider = document.getElementById('slider');
-    const leftValue = document.getElementById('left-value');
-    const rightValue = document.getElementById('right-value');
-
-    // Обновляем ползунок при изменении значения в полях ввода чисел
-    leftValue.addEventListener('input', function() {
-        const value = parseInt(this.value);
-        slider.value = slider.max - value;
-    });
-
-    rightValue.addEventListener('input', function() {
-        const value = parseInt(this.value);
-        slider.value = value;
-    });
-
-    // Обновляем значения в полях ввода чисел при изменении ползунка
-    slider.addEventListener('input', function() {
-        const value = parseInt(this.value);
-        leftValue.value = slider.max - value;
-        rightValue.value = value;
-    });
-</script>
+{{ cit_set(menu_par.cit_img, menu_par.cit_name) }}
 
 
 {% endblock %}

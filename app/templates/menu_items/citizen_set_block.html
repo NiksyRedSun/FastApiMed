@@ -1,0 +1,67 @@
+
+
+{% macro cit_set(pers_img, pers_name) %}
+
+<div class="set_title">Работники</div>
+<form class="cit_set">
+<div class="cit_set_level1">
+    <div class="person_and_num">
+        <img src="{{ url_for('static', path='images/persons/citizen.png' ) }}" alt='Горожанин'>
+        <input type="number" min="0" max="100" value="50" class="input-value" id="left-value">
+    </div>
+        <input type="range" min="0" max="100" value="50" id="slider" class="width100">
+    <div class="person_and_num">
+        <img src="{{ url_for('static', path=pers_img) }}" alt={{ pers_name }}>
+        <input type="number" min="0" max="100" value="50" class="input-value" id="right-value">
+    </div>
+</div>
+    <div class="cit_set_level2">
+        <input type="submit" value="Организовать">
+    </div>
+</form>
+
+
+
+<script>
+    const slider = document.getElementById('slider');
+    const leftValue = document.getElementById('left-value');
+    const rightValue = document.getElementById('right-value');
+
+    // Обновляем ползунок при изменении значения в полях ввода чисел
+    leftValue.addEventListener('input', function() {
+        let value = parseInt(this.value);
+        if (value > this.max) {
+            this.value = this.max;
+            value = this.max;
+        }
+        if (value < this.min) {
+            this.value = this.min;
+            value = this.min;
+        }
+        slider.value = slider.max - value;
+        rightValue.value = slider.max - value;
+    });
+
+    rightValue.addEventListener('input', function() {
+        let value = parseInt(this.value);
+        if (value > this.max) {
+            this.value = this.max;
+            value = this.max;
+        }
+        if (value < this.min) {
+            this.value = this.min;
+            value = this.min;
+        }
+        slider.value = value;
+        leftValue.value = slider.max - value;
+    });
+
+    // Обновляем значения в полях ввода чисел при изменении ползунка
+    slider.addEventListener('input', function() {
+        const value = parseInt(this.value);
+        leftValue.value = slider.max - value;
+        rightValue.value = value;
+    });
+</script>
+
+{% endmacro %}
