@@ -12,3 +12,4 @@ SomeRepos/Chars.db
 fapi.db
 app/static/images
 app/meddb.db
+app/test_router.py

@@ -19,9 +19,9 @@ class User(Base):
     is_verified: bool = Column(Boolean, default=False, nullable=False)
 
     inventory: Mapped[Inventory] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
-    knights: Mapped[List[Knight]] = relationship()
-    archers: Mapped[List[Archer]] = relationship()
-    citizens: Mapped[List[Citizen]] = relationship()
+    knights: Mapped[List[Knight]] = relationship(back_populates="user")
+    archers: Mapped[List[Archer]] = relationship(back_populates="user")
+    citizens: Mapped[List[Citizen]] = relationship(back_populates="user")
     wood_house: Mapped[WoodHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     fields: Mapped[Fields] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     hunter_house: Mapped[HunterHouse] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
@@ -30,6 +30,9 @@ class User(Base):
     bar: Mapped[Bar] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     market: Mapped[Market] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
     tower: Mapped[Tower] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
+
+    def __str__(self):
+        return f"Пользователь №{self.id} ебать"
 
 
 

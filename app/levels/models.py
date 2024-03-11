@@ -1,5 +1,5 @@
-from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, MetaData, Text, ForeignKey, Boolean, Float
-from sqlalchemy_utils import ChoiceType
+from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, MetaData, Text, ForeignKey, Boolean, Float, Enum
+import enum
 
 from ..database import Base
 from sqlalchemy.orm import relationship
@@ -29,7 +29,7 @@ class Knight(Base):
     agility = Column("agility", Integer)
     hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
-    # user = relationship("User", back_populates='knight')
+    user = relationship("User", back_populates='knights')
 
 
 
@@ -43,30 +43,33 @@ class Archer(Base):
     agility = Column("agility", Integer)
     hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
-    # user = relationship("User", back_populates='archer')
+    user = relationship("User", back_populates='archers')
 
 
 
 class Citizen(Base):
     __tablename__ = "citizen"
 
-    TYPES = [
-        ('just_citizen', 'JustCitizen'),
-        ('peasant', 'Peasant'),
-        ('woodcutter', 'Woodcutter'),
-        ('huntsman', 'Huntsman'),
-        ('militia', 'Militia')
-    ]
+    class MyEnum(enum.Enum):
+        just_citizen = 1
+        peasant = 2
+        woodcutter = 3
+        huntsman = 4
+        militia = 5
+
+
 
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+
     attack = Column("attack", Integer)
     defense = Column("defense", Integer)
     agility = Column("agility", Integer)
+
     hp = Column("hp", Integer)
-    duty = Column("duty", ChoiceType(TYPES))
     max_hp = Column("max_hp", Integer)
-    # user = relationship("User", back_populates='peasant')
+    duty = Column("duty", Enum(MyEnum), default=1)
+    user = relationship("User", back_populates='citizens')
 
 
 
@@ -118,7 +121,7 @@ class HunterHouse(Base):
 
     time_for_res_pack = Column("time_for_res_pack", Integer, default=120)
     res_per_worker = Column("res_per_worker", Float, default=1)
-    
+
     workers = Column("workers", Integer, default=0)
     user = relationship("User", back_populates='hunter_house')
 
@@ -130,15 +133,19 @@ class TownSquare(Base):
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
+
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     wheat_for_next_lvl = Column("wheat_for_next_lvl", Integer, default=10)
     wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=10)
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
-    time_for_citizens = Column("time_for_citizen", Integer, default=30)
-    # пока что ставим 5 минут чисто потестить
+
+    time_for_citizen = Column("time_for_citizen", Integer, default=30)
     time_for_money_pack = Column("time_for_money_pack", Integer, default=30)
     money_per_citizen = Column("money_per_citizens", Float, default=1)
+
+
     citizens_in_city = Column("citizens_in_city", Integer, default=0)
+    unemployed_citizens = Column("unemployed_citizens", Integer, default=0)
     max_citizens = Column("max_citizens", Integer, default=150)
     user = relationship("User", back_populates='town_square')
 

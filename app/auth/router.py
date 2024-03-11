@@ -27,8 +27,6 @@ async def validation_reg(email: str, user: str, password: str, password2: str, s
         return "Пользователь с таким именем уже существует"
     if not email or not user or not password or not password2:
         return "Заполните все поля формы"
-    # if email[-3:] != '.ru' or '@' not in email:
-    #     return "Мейл не соответствует правилам"
     if password != password2:
         return "Пароли не совпадают"
     if len(password) < 8:
@@ -49,6 +47,7 @@ async def tables_for_user(id, session):
         tower = Tower(user_id=id)
         bar = Bar(user_id=id)
 
+        # можно создать список и передать его в add_all()
         session.add(inv)
         session.add(wood_house)
         session.add(hunter_house)
