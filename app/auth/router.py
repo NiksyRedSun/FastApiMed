@@ -134,9 +134,10 @@ async def register_post(request: Request, email: str = Form(default=''), passwor
 
                 await tables_for_user(user_id, sqlsession)
 
-                # gameplays[user_id] = GamePlay(user_id)
                 # loop = asyncio.get_event_loop()
-                # loop.create_task(gameplays[user_id].make_money())
+                # gameplays[user_id] = GamePlay(user_id, sqlsession, loop)
+                # gameplays[user_id].start_everything()
+
 
                 return RedirectResponse(request.url_for('login_get').include_query_params(message='Регистрация успешна', message_class='success'), status_code=302)
             else:

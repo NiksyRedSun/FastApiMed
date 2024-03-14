@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import APIRouter, Request, Depends, FastAPI, Form, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-
+import asyncio
 from app.database import get_async_session, async_session_maker
 from sqlalchemy import select, update
 from app.auth.models import User
@@ -12,12 +12,20 @@ from app.menu.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from app.config import templates
 from app.auth.router import router as auth_router
+from app.gameplay.gameplay import start_game, gameplays
+from contextlib import asynccontextmanager
 
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await start_game()
+    yield
+    pass
 
 
 app = FastAPI(
-    title="MEDIEVAL"
+    title="MEDIEVAL", lifespan=lifespan
 )
 
 
@@ -46,19 +54,21 @@ async def test_router(request: Request):
     session = async_session_maker()
     async with session:
         # Получить объект
-        print(await session.get(User, 1))
+        # print(await session.get(User, 1))
         # Можно делать запросы сразу с нескольких таблиц, в документации показано, как
         query = select(User).where(User.id == 1)
         pre_result = await session.execute(query)
 
-        print(type(pre_result))
+        # print(type(pre_result))
         # различные варианты работы с resultом (который в данном случае зовется pre_result)
         # print(list(pre_result))
         # print(pre_result.fetchall())
         # print(pre_result.all())
-        print(pre_result.one())
+        # print(pre_result.one())
         # Без scalars возвращает объекты в кортежах, если хочешь вытаскивать объекты из кортежей, используй scalars
         # print(pre_result.scalars().one())
+        # строка ниже заменяет предыдущую
+        print(pre_result.scalar_one())
 
         # Сешн коммит нужен только в том случае, если мы изменяли какие-либо данные внутри сессии
         # session.commit()
@@ -116,4 +126,6 @@ app.include_router(auth_router)
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
     # uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
 
