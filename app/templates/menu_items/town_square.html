@@ -12,8 +12,8 @@
     <div class="menu_par_info">Налогов с одного горожанина: 1.0</div>
 </div>
 <div class="in_time_info">
-    <div class="menu_par_info">До следующего горожанина 4 минуты</div>
-    <div class="menu_par_info">До следующего сбора налогов 5 минут</div>
+    <div class="menu_par_info">До следующего горожанина {{context.secs_to_cit}}</div>
+    <div class="menu_par_info">До следующего сбора налогов {{context.secs_to_money}}</div>
 </div>
 
 {% endblock %}

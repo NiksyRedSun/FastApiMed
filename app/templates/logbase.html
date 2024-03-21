@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/styles.css') }}">
+  {% block title %}
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>MEDIEVAL</title>
+    {% endif %}
+  {% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<main>
+    <div class="log_reg_descr">Добро пожаловать в мое скромное детище</div>
+    {% block content %}
+    {% endblock %}
+</main>
+</body>
+</html>
+
+

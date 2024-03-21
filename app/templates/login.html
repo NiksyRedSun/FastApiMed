@@ -1,8 +1,10 @@
-{% extends "base.html"%}
+{% extends "logbase.html"%}
 
 
 
 {% block content %}
+
+
     <div class="in_menu_point">
         <form action="{{ url_for('login_post')}}" enctype="multipart/form-data" method="post">
             <p class="linename">Мэйл:</p><input name="email" type="email">

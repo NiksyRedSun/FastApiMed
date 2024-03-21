@@ -14,7 +14,7 @@ from app.config import templates
 from app.auth.router import router as auth_router
 from app.gameplay.gameplay import start_game, gameplays
 from contextlib import asynccontextmanager
-
+from app.gameplay.context import make_context
 
 
 @asynccontextmanager
@@ -31,19 +31,22 @@ app = FastAPI(
 
 app.mount("/app/static", StaticFiles(directory="static", html=True), name="static")
 
+
+
 @app.get("/")
-def get_menu(request: Request, user: User | None = Depends(current_user)):
-    try:
+async def get_menu(request: Request, user: User | None = Depends(current_user), session: AsyncSession = Depends(get_async_session)):
+    # try:
         if user is None:
             return RedirectResponse(request.url_for('login_get'), status_code=302)
         else:
-            return templates.TemplateResponse("menu.html", {"request": request})
-    except:
-        return {
-            "status": "error",
-            "data": ":(",
-            "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
-        }
+            context = await make_context(session, user)
+            return templates.TemplateResponse("menu.html", {"request": request, "context": context})
+    # except:
+    #     return {
+    #         "status": "error",
+    #         "data": ":(",
+    #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+    #     }
 
 
 

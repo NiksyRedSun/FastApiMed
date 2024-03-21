@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="in_menu_point">
-        <img src="{{ url_for('static', path=menu_par.img_link) }}" alt={{menu_par.name}}>
+        <img src="{{ url_for('static', path=context.menu_par.img_link) }}" alt={{context.menu_par.name}}>
         <div class="in_menu_point_block">
-            <div class="menu_par_name">{{menu_par.name}}</div>
+            <div class="menu_par_name">{{context.menu_par.name}}</div>
             <div class="menu_par_lvl">Уровень: 0</div>
         </div>
-        <div class="menu_par_descr">{{menu_par.descr}}</div>
+        <div class="menu_par_descr">{{context.menu_par.descr}}</div>
         {% block menu_content %}
         {% endblock %}
         <div class="upgrade">

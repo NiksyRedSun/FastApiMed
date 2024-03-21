@@ -6,6 +6,7 @@ body {
     width: 1300px;
     margin: 0 auto;
     overflow-x: auto;
+    font-family: "MedievalSharp", cursive;
 }
 
 
@@ -443,4 +444,11 @@ div.upgrade > a {
 
 div.upgrade > a:hover{
     background: #790604;
+}
+
+div.log_reg_descr {
+    text-align: center;
+    padding: 5% 2% 2% 2%;
+    color: #790604;
+    font-size: 26pt;
 }

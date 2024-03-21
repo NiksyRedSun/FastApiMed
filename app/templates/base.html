@@ -23,7 +23,7 @@
     <div class="navblock">
         <div class="res">
             <img src="{{ url_for('static', path='images/res/money.png') }}" alt="Монеты" class="res">
-            <div class="num">0</div>
+            <div class="num">{{context.inventory.money}}</div>
             <img src="{{ url_for('static', path='images/res/wood.png') }}" alt="Монеты" class="res">
             <div class="num">0</div>
             <img src="{{ url_for('static', path='images/res/wheat.png') }}" alt="Монеты" class="res">

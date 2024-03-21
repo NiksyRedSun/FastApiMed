@@ -84,7 +84,6 @@ async def login_post(request: Request, email: str = Form(default=''), password: 
                 },
             )
         if response.status == 400:
-            print(response.json())
             return RedirectResponse(request.url_for('login_get').include_query_params(
                     message='Неправильный логин или пароль', message_class='error'),
                 status_code=302)
