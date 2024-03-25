@@ -1,18 +1,17 @@
 import uvicorn
-from fastapi import APIRouter, Request, Depends, FastAPI, Form, status
+from fastapi import Request, Depends, FastAPI
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-import asyncio
 from app.database import get_async_session, async_session_maker
-from sqlalchemy import select, update
+from sqlalchemy import select
 from app.auth.models import User
 from app.auth.base_config import auth_backend, fastapi_users, current_user
 from app.auth.schemas import UserRead, UserCreate
-from app.menu.router import router as router_menu
+from levels.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from app.config import templates
 from app.auth.router import router as auth_router
-from app.gameplay.gameplay import start_game, gameplays
+from app.gameplay.gameplay import start_game
 from contextlib import asynccontextmanager
 from app.gameplay.context import make_context
 

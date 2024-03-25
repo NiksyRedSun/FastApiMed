@@ -24,12 +24,12 @@
         <div class="res">
             <img src="{{ url_for('static', path='images/res/money.png') }}" alt="Монеты" class="res">
             <div class="num">{{context.inventory.money}}</div>
-            <img src="{{ url_for('static', path='images/res/wood.png') }}" alt="Монеты" class="res">
-            <div class="num">0</div>
-            <img src="{{ url_for('static', path='images/res/wheat.png') }}" alt="Монеты" class="res">
-            <div class="num">0</div>
-            <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Монеты" class="res">
-            <div class="num">0</div>
+            <img src="{{ url_for('static', path='images/res/wood.png') }}" alt="Дерево" class="res">
+            <div class="num">{{context.inventory.wood}}</div>
+            <img src="{{ url_for('static', path='images/res/wheat.png') }}" alt="Шерсть" class="res">
+            <div class="num">{{context.inventory.wheat}}</div>
+            <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Шкуры" class="res">
+            <div class="num">{{context.inventory.skins}}</div>
     </div>
         </div>
     <div class="navblock"><a href="{{ url_for('get_menu')}}">Здесь будет название города</a></div>

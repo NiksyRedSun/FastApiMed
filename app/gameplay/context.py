@@ -8,7 +8,7 @@ from app.auth.base_config import auth_backend, fastapi_users, current_user
 from fastapi.responses import RedirectResponse
 from ..database import get_async_session
 from app.gameplay.gameplay import gameplays
-from app.gameplay.spec_funcs import seconds_to_minutes
+from app.gameplay.spec_funcs import seconds_to_minutes, seconds_to_minutes_in_nums
 # from operations.schemas import OperationCreate
 
 
@@ -63,5 +63,14 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
         if slug == 'town_square':
             dict_context['secs_to_cit'] = seconds_to_minutes(gameplay.seconds_to_new_citizen)
             dict_context['secs_to_money'] = seconds_to_minutes(gameplay.seconds_to_money)
+
+        async with session:
+            town_square = await gameplay.get_obj_by_user_id(session, TownSquare)
+            dict_context['citizens'] = town_square.citizens_in_city
+            dict_context['max_citizens'] = town_square.max_citizens
+            dict_context['time_to_cit'] = seconds_to_minutes_in_nums(town_square.time_for_citizen)
+            dict_context['time_to_taxes'] = seconds_to_minutes_in_nums(town_square.time_for_money_pack)
+            dict_context['taxes_from_one'] = town_square.money_per_citizen
+
 
     return dict_context

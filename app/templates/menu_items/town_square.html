@@ -5,11 +5,11 @@
 {% block menu_content %}
 
 <div class="stat_info">
-    <div class="menu_par_info">Всего горожан: 0</div>
-    <div class="menu_par_info">Максимум горожан: 100</div>
-    <div class="menu_par_info">Время появления горожанина: 05:00</div>
-    <div class="menu_par_info">Время сбора налогов раз в 05:00</div>
-    <div class="menu_par_info">Налогов с одного горожанина: 1.0</div>
+    <div class="menu_par_info">Всего горожан: {{ context.citizens }}</div>
+    <div class="menu_par_info">Максимум горожан: {{ context.max_citizens }}</div>
+    <div class="menu_par_info">Время появления горожанина: {{ context.time_to_cit }}</div>
+    <div class="menu_par_info">Время сбора налогов раз в {{ context.time_to_taxes }}</div>
+    <div class="menu_par_info">Налогов с одного горожанина: {{ context.taxes_from_one }}</div>
 </div>
 <div class="in_time_info">
     <div class="menu_par_info">До следующего горожанина {{context.secs_to_cit}}</div>

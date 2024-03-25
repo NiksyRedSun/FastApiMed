@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Request, Depends, FastAPI, HTTPException
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..config import templates
+from config import templates
 from app.auth.models import User
 from app.levels.models import *
 from app.auth.base_config import auth_backend, fastapi_users, current_user
 from fastapi.responses import RedirectResponse
-from ..database import get_async_session
+from database import get_async_session
 from app.gameplay.context import make_context
 
 
@@ -15,7 +15,6 @@ router = APIRouter(
     prefix="/menu",
     tags=["Menu"]
 )
-
 
 
 
