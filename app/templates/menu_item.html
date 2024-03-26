@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="in_menu_point">
-        <img src="{{ url_for('static', path=context.menu_par.img_link) }}" alt={{context.menu_par.name}}>
+        <img src="{{ url_for('static', path=context.level_info.img_link) }}" alt={{context.level_info.name}}>
         <div class="in_menu_point_block">
-            <div class="menu_par_name">{{context.menu_par.name}}</div>
+            <div class="menu_par_name">{{context.level_info.name}}</div>
             <div class="menu_par_lvl">Уровень: 0</div>
         </div>
-        <div class="menu_par_descr">{{context.menu_par.descr}}</div>
+        <div class="menu_par_descr">{{context.level_info.descr}}</div>
         {% block menu_content %}
         {% endblock %}
         <div class="upgrade">
@@ -32,10 +32,10 @@
 
             {% if context.level.skins_for_next_lvl %}
             <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Шкуры">
-            <div class="num">{{context.level.wheat_for_next_lvl}}</div>
+            <div class="num">{{context.level.skins_for_next_lvl}}</div>
             {% endif %}
 
-            <div>{{context.secs_to_mins_in_nums(context.level.time_for_next_lvl)}}</div>
+            <div class="time">{{context.secs_to_mins_in_nums(context.level.time_for_next_lvl)}}</div>
             <a>Улучшить</a>
         </div>
     </div>

@@ -4,9 +4,9 @@
 
 {% block menu_content %}
 <div class="stat_info">
-    <div class="menu_par_info">Всего рыцарей: 0</div>
-    <div class="menu_par_info">Максимум рыцарей: 50</div>
-    <div class="menu_par_info">Время тренировки рыцаря: 05:00</div>
+    <div class="menu_par_info">Всего рыцарей: {{ context.level.knights }}</div>
+    <div class="menu_par_info">Максимум рыцарей: {{ context.level.max_knights }}</div>
+    <div class="menu_par_info">Время тренировки рыцаря: {{ context.secs_to_mins_in_nums(context.level.time_for_knight) }}</div>
 </div>
 <div class="in_time_info">
     <div class="menu_par_info">До следующего рыцаря 4 минуты</div>
@@ -16,6 +16,6 @@
 
 {% from "menu_items/citizen_set_block.html" import cit_set with context %}
 
-{{ cit_set(menu_par.cit_img, menu_par.cit_name) }}
+{{ cit_set(context.level_info.cit_img, context.level_info.cit_name, 0, 0, context.level.max_knights) }}
 
 {% endblock %}

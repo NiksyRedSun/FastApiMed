@@ -417,29 +417,24 @@ div.upgrade > div {
     color: #790604;
 }
 
-div.upgrade > a {
-    display: block;
-    height: 100%;
-    font-size: 28pt;
-    margin-left: auto;
-    border: solid #790604 6pt;
-    background: #891614;
-    color: #f9e3be;
-    border-radius: 10px;
-    padding: 1% 1% 1% 1%;
-}
 
 div.upgrade > a {
     display: block;
     height: 100%;
     font-size: 28pt;
-    margin-left: auto;
     border: solid #790604 6pt;
     background: #891614;
     color: #f9e3be;
     border-radius: 10px;
     padding: 0.5% 1% 0.5% 1%;
     transition: all, 0.3s, ease, 0.3s;
+}
+
+div.upgrade > div.time {
+    margin-top: 1%;
+    margin-left: auto;
+    font-size: 20pt;
+    font-weight: 900;
 }
 
 div.upgrade > a:hover{

@@ -47,31 +47,38 @@ level_info = {'bar': {'name': 'Таверна', 'img_link': 'images/cards/256/ba
               }
 
 
+model_by_slug = {'town_square': TownSquare, 'wood_house': WoodHouse, 'war_house': WarHouse, 'tower': Tower,
+                 'market': Market, 'hhunter_house': HunterHouse, 'fields': Fields, 'bar': Bar}
+
 
 
 async def make_context(session: AsyncSession, user: User, slug: str = None):
     dict_context = dict()
     gameplay = gameplays[user.id]
 
+    #функции
     dict_context["secs_to_mins"] = seconds_to_minutes
     dict_context["secs_to_mins_in_nums"] = seconds_to_minutes_in_nums
 
+    #инвентарь
     async with session:
         inventory = await gameplay.get_obj_by_user_id(session, Inventory)
         dict_context['inventory'] = inventory
 
-
+    #материал по уровням
     if slug is not None:
-        dict_context['menu_par'] = level_info[slug]
+        dict_context['level_info'] = level_info[slug]
 
+        async with session:
+            dict_context['level'] = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
+
+        #в зависимости от уровня
         if slug == 'town_square':
-
-            async with session:
-                town_square = await gameplay.get_obj_by_user_id(session, TownSquare)
-                dict_context['level'] = town_square
-
             dict_context['secs_to_cit'] = gameplay.seconds_to_new_citizen
             dict_context['secs_to_money'] = gameplay.seconds_to_money
+
+        elif slug == 'war_house':
+            pass
 
 
 

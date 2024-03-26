@@ -4,10 +4,10 @@
 
 {% block menu_content %}
 <div class="stat_info">
-    <div class="menu_par_info">Работников: 0</div>
-    <div class="menu_par_info">Время проверки ловушек: 05:00</div>
-    <div class="menu_par_info">Шкур на одного работника: 1.0</div>
-    <div class="menu_par_info">Шкур со всех работников: 0</div>
+    <div class="menu_par_info">Работников: {{context.level.workers}}</div>
+    <div class="menu_par_info">Время проверки ловушек: {{context.secs_to_mins_in_nums(context.level.time_for_res_pack)}}</div>
+    <div class="menu_par_info">Шкур на одного работника: {{ context.level.res_per_worker }}</div>
+    <div class="menu_par_info">Шкур со всех работников: {{ context.level.res_per_worker*context.level.workers }}</div>
 </div>
 <div class="in_time_info">
     <div class="menu_par_info">До следующей проверки ловушек</div>
@@ -17,7 +17,7 @@
 
 {% from "menu_items/citizen_set_block.html" import cit_set with context %}
 
-{{ cit_set(menu_par.cit_img, menu_par.cit_name) }}
+{{ cit_set(context.level_info.cit_img, context.level_info.cit_name) }}
 
 
 {% endblock %}

@@ -1,17 +1,17 @@
 
 
-{% macro cit_set(pers_img, pers_name) %}
+{% macro cit_set(pers_img, pers_name, min_value, cur_value, max_value) %}
 
 <form class="cit_set">
 <div class="cit_set_level1">
     <div class="person_and_num">
         <img src="{{ url_for('static', path='images/persons/citizen.png' ) }}" alt='Горожанин'>
-        <input type="number" min="0" max="100" value="50" class="input-value" id="left-value">
+        <input type="number" min="{{ min_value }}" max="{{ max_value }}" value="{{ max_value }}" class="input-value" id="left-value">
     </div>
-        <input type="range" min="0" max="100" value="50" id="slider" class="width100">
+        <input type="range" min="{{ min_value }}" max="{{ max_value }}" value="{{ min_value }}" id="slider" class="width100">
     <div class="person_and_num">
         <img src="{{ url_for('static', path=pers_img) }}" alt="{{ pers_name }}">
-        <input type="number" min="0" max="100" value="50" class="input-value" id="right-value">
+        <input type="number" min="{{ min_value }}" max="{{ max_value }}" value="{{ min_value }}" class="input-value" id="right-value">
     </div>
 </div>
     <div class="cit_set_level2">

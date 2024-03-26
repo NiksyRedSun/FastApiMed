@@ -192,10 +192,13 @@ class Market(Base):
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
+
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     skins_for_next_lvl = Column("skins_for_next_lvl", Integer, default=10)
     wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=10)
     wheat_for_next_lvl = Column("wheat_for_next_lvl", Integer, default=10)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
+
     taxes = Column("taxes", Float, default=15)
     user = relationship("User", back_populates='market')
 
@@ -206,9 +209,14 @@ class Tower(Base):
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
+
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=10)
+    time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
+
     user = relationship("User", back_populates='tower')
 
 
-
+# user = User.__table__
+# alembic revision --autogenerate -m 'INPUTMESSAGEHERE'
+# alembic upgrade head
