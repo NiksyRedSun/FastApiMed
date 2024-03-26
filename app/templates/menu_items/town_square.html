@@ -5,15 +5,15 @@
 {% block menu_content %}
 
 <div class="stat_info">
-    <div class="menu_par_info">Всего горожан: {{ context.citizens }}</div>
-    <div class="menu_par_info">Максимум горожан: {{ context.max_citizens }}</div>
-    <div class="menu_par_info">Время появления горожанина: {{ context.time_to_cit }}</div>
-    <div class="menu_par_info">Время сбора налогов раз в {{ context.time_to_taxes }}</div>
-    <div class="menu_par_info">Налогов с одного горожанина: {{ context.taxes_from_one }}</div>
+    <div class="menu_par_info">Всего горожан: {{ context.level.unemployed_citizens }}</div>
+    <div class="menu_par_info">Максимум горожан: {{ context.level.max_citizens }}</div>
+    <div class="menu_par_info">Время появления горожанина: {{ context.secs_to_mins_in_nums(context.level.time_for_citizen) }}</div>
+    <div class="menu_par_info">Время сбора налогов: {{ context.secs_to_mins_in_nums(context.level.time_for_money_pack) }}</div>
+    <div class="menu_par_info">Налогов с одного горожанина: {{ context.level.money_per_citizen }}</div>
 </div>
 <div class="in_time_info">
-    <div class="menu_par_info">До следующего горожанина {{context.secs_to_cit}}</div>
-    <div class="menu_par_info">До следующего сбора налогов {{context.secs_to_money}}</div>
+    <div class="menu_par_info">До следующего горожанина {{context.secs_to_mins(context.secs_to_cit)}}</div>
+    <div class="menu_par_info">До следующего сбора налогов {{context.secs_to_mins(context.secs_to_money)}}</div>
 </div>
 
 {% endblock %}

@@ -8,6 +8,7 @@ from app.auth.base_config import auth_backend, fastapi_users, current_user
 from fastapi.responses import RedirectResponse
 from database import get_async_session
 from app.gameplay.context import make_context
+from app.gameplay.spec_funcs import seconds_to_minutes, seconds_to_minutes_in_nums
 
 
 
