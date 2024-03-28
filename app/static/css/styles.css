@@ -386,24 +386,24 @@ div.set_title {
 div.in_time_info {
     color: #591038;
     font-size: 25pt;
+    margin-bottom: 2%;
 }
 
 div.upgrade {
-    color: #69172b;
-    margin-top: 2%;
+    color: #790604;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
 }
 
-div.upgrade img {
+div.upgrade_line img {
     width: 4%;
     height: 75%;
     border: solid #800000 3pt;
     border-radius: 10px;
 }
 
-div.upgrade > div.num {
+div.upgrade_line > div.num {
     font-size: 20pt;
     width: 5%;
     text-align: left;
@@ -412,7 +412,7 @@ div.upgrade > div.num {
     padding-top: 0.5%;
 }
 
-div.upgrade > div {
+div.upgrade_info {
     display: flex;
     align-items: center;
     font-size: 20pt;
@@ -420,8 +420,16 @@ div.upgrade > div {
     color: #790604;
 }
 
+div.upgrade_line {
+    color: #790604;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
-div.upgrade > a {
+
+
+div.upgrade_line > a {
     display: block;
     height: 100%;
     font-size: 28pt;
@@ -434,14 +442,15 @@ div.upgrade > a {
     transition: all, 0.3s, ease, 0.3s;
 }
 
-div.upgrade > div.time {
+div.upgrade_line > div.time {
     margin-top: 1%;
     margin-left: auto;
     font-size: 20pt;
     font-weight: 900;
+    padding-right: 1%;
 }
 
-div.upgrade > a:hover{
+div.upgrade_line > a:hover{
     background: #790604;
 }
 
@@ -495,3 +504,24 @@ div.cityname > a {
 div.cityname > a:hover {
     color: #ffd700;
 }
+
+div.upgrade > div.menu_par_info {
+    font-size: 25pt;
+}
+
+div.upgrade > div.success {
+    width: 100%;
+    text-align: justify;
+    padding: 0.5% 0% 0.5% 0%;
+    font-size: 25pt;
+    color: #176955;
+}
+
+div.upgrade > div.error {
+    width: 100%;
+    text-align: justify;
+    padding: 0.5% 0% 0.5% 0%;
+    font-size: 25pt;
+    color: #790604;
+}
+

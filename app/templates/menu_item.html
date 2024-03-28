@@ -14,7 +14,9 @@
         {% endblock %}
 
         <div class="upgrade">
-            <div>Улучшить за</div>
+            <div class="upgrade_line">
+
+            <div class="upgrade_info">Улучшить за</div>
 
             {% if context.level.money_for_next_lvl %}
             <img src="{{ url_for('static', path='images/res/money.png') }}" alt="Монеты">
@@ -38,14 +40,15 @@
 
             <div class="time">{{context.secs_to_mins_in_nums(context.level.time_for_next_lvl)}}</div>
             <a href="{{ url_for('upgrade_level', slug=context.level_slug) }}">Улучшить</a>
-        </div>
-        <div class="upgrade">
-            <div>До улучшения осталось 5 минут....</div>
+            </div>
+
+            <div class="menu_par_info">До улучшения осталось 5 минут....</div>
+            {% if message is not none %}
+            <div class="{{ request.query_params.get('message_class') }}">{{ message }}</div>
+            {% endif %}
         </div>
 
-        {% if message is not none %}
-        <p class="{{ request.query_params.get('message_class') }}">{{ message }}</p>
-        {% endif %}
+
 
     </div>
 {% endblock %}

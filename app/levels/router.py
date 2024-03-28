@@ -55,7 +55,7 @@ async def upgrade_level(request: Request, slug: str, session: AsyncSession = Dep
             if check_inv(level, inventory):
                 return RedirectResponse(request.url_for('get_level', slug=slug).include_query_params(message='Улучшение запущено', message_class='success'), status_code=302)
             else:
-                return RedirectResponse(request.url_for('get_level', slug=slug).include_query_params(message='Не хватает ресурсов', message_class='error'), status_code=302)
+                return RedirectResponse(request.url_for('get_level', slug=slug).include_query_params(message='Не хватает ресурсов для улучшения', message_class='error'), status_code=302)
 
 
     # except Exception as e:
