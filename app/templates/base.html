@@ -20,6 +20,10 @@
 
 <main>
 <nav>
+    <a class="top_menu" href="">
+        <img src="{{ url_for('static', path='images/top_menu/chat.png') }}" alt="Переговоры">
+        <p>Переговоры</p>
+    </a>
     <div class="navblock">
         <div class="res">
             <img src="{{ url_for('static', path='images/res/money.png') }}" alt="Монеты" class="res">
@@ -30,9 +34,14 @@
             <div class="num">{{context.inventory.wheat}}</div>
             <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Шкуры" class="res">
             <div class="num">{{context.inventory.skins}}</div>
-    </div>
         </div>
-    <div class="navblock"><a href="{{ url_for('get_menu')}}">Здесь будет название города</a></div>
+        <div class="cityname"><a href="{{ url_for('get_menu')}}">Здесь будет название города</a></div>
+    </div>
+
+    <a class="top_menu" href="">
+        <img src="{{ url_for('static', path='images/top_menu/info.png') }}" alt="Сводка">
+        <p>Сводка</p>
+    </a>
 </nav>
 
     {% block content %}

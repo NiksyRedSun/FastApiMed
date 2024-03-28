@@ -4,12 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..config import templates
 from app.auth.models import User
 from app.levels.models import *
-from app.auth.base_config import auth_backend, fastapi_users, current_user
-from fastapi.responses import RedirectResponse
-from ..database import get_async_session
 from app.gameplay.gameplay import gameplays
 from app.gameplay.spec_funcs import seconds_to_minutes, seconds_to_minutes_in_nums
-# from operations.schemas import OperationCreate
+from app.gameplay.spec_funcs import model_by_slug
+
 
 
 
@@ -47,8 +45,7 @@ level_info = {'bar': {'name': 'Таверна', 'img_link': 'images/cards/256/ba
               }
 
 
-model_by_slug = {'town_square': TownSquare, 'wood_house': WoodHouse, 'war_house': WarHouse, 'tower': Tower,
-                 'market': Market, 'hhunter_house': HunterHouse, 'fields': Fields, 'bar': Bar}
+
 
 
 
@@ -68,6 +65,7 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     #материал по уровням
     if slug is not None:
         dict_context['level_info'] = level_info[slug]
+        dict_context['level_slug'] = slug
 
         async with session:
             dict_context['level'] = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])

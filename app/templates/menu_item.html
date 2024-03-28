@@ -12,6 +12,7 @@
         <div class="menu_par_descr">{{context.level_info.descr}}</div>
         {% block menu_content %}
         {% endblock %}
+
         <div class="upgrade">
             <div>Улучшить за</div>
 
@@ -36,7 +37,15 @@
             {% endif %}
 
             <div class="time">{{context.secs_to_mins_in_nums(context.level.time_for_next_lvl)}}</div>
-            <a>Улучшить</a>
+            <a href="{{ url_for('upgrade_level', slug=context.level_slug) }}">Улучшить</a>
         </div>
+        <div class="upgrade">
+            <div>До улучшения осталось 5 минут....</div>
+        </div>
+
+        {% if message is not none %}
+        <p class="{{ request.query_params.get('message_class') }}">{{ message }}</p>
+        {% endif %}
+
     </div>
 {% endblock %}

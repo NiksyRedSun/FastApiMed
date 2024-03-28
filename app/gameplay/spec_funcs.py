@@ -1,3 +1,9 @@
+from app.levels.models import *
+
+
+model_by_slug = {'town_square': TownSquare, 'wood_house': WoodHouse, 'war_house': WarHouse, 'tower': Tower,
+                 'market': Market, 'hhunter_house': HunterHouse, 'fields': Fields, 'bar': Bar}
+
 
 
 
@@ -28,3 +34,20 @@ def seconds_to_minutes_in_nums(seconds):
         else:
             seconds = f"0{minutes}"
     return f'{minutes}:{seconds}'
+
+
+
+def check_inv(level, inventory: Inventory):
+    if hasattr(level, 'money_for_next_lvl'):
+        if inventory.money < level.money_for_next_lvl:
+            return False
+    if hasattr(level, 'wheat_for_next_lvl'):
+        if inventory.wheat < level.wheat_for_next_lvl:
+            return False
+    if hasattr(level, 'wood_for_next_lvl'):
+        if inventory.wood < level.wood_for_next_lvl:
+            return False
+    if hasattr(level, 'skins_for_next_lvl'):
+        if inventory.skins < level.skins_for_next_lvl:
+            return False
+    return True
