@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse
 from database import get_async_session
 from app.gameplay.context import make_context
 from app.gameplay.gameplay import gameplays
-from app.gameplay.spec_funcs import model_by_slug, check_inv
+from app.gameplay.spec_funcs import model_by_slug, check_inv, take_inv
 
 
 
@@ -48,11 +48,19 @@ async def upgrade_level(request: Request, slug: str, session: AsyncSession = Dep
         if user is None:
             return RedirectResponse(request.url_for('login_get'), status_code=302)
         else:
+
             gameplay = gameplays[user.id]
-            inventory = await gameplay.get_obj_by_user_id(session, Inventory)
-            level = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
+            async with session:
+                inventory = await gameplay.get_obj_by_user_id(session, Inventory)
+                level = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
 
             if check_inv(level, inventory):
+                async with session:
+                    inventory = take_inv(level, inventory)
+                    session.add(inventory)
+                    await session.commit()
+
+                gameplay.loop.create_task(gameplay.upgrade_level(slug))
                 return RedirectResponse(request.url_for('get_level', slug=slug).include_query_params(message='Улучшение запущено', message_class='success'), status_code=302)
             else:
                 return RedirectResponse(request.url_for('get_level', slug=slug).include_query_params(message='Не хватает ресурсов для улучшения', message_class='error'), status_code=302)

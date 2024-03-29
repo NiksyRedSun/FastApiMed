@@ -141,7 +141,7 @@ class TownSquare(Base):
 
     time_for_citizen = Column("time_for_citizen", Integer, default=30)
     time_for_money_pack = Column("time_for_money_pack", Integer, default=30)
-    money_per_citizen = Column("money_per_citizens", Float, default=1)
+    money_per_citizen = Column("money_per_citizen", Float, default=1)
 
 
     citizens_in_city = Column("citizens_in_city", Integer, default=0)

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_async_session, async_session_maker
 from app.levels.models import *
 from sqlalchemy.orm import selectinload
-from app.gameplay.spec_funcs import check_inv
+from app.gameplay.spec_funcs import check_inv, model_by_slug
 
 
 gameplays = {}
@@ -47,7 +47,7 @@ class GamePlay:
 
         self.seconds_to_upgrade = {
                             'town_square': None, 'wood_house': None, 'war_house': None, 'tower': None,
-                             'market': None, 'hhunter_house': None, 'fields': None, 'bar': None
+                             'market': None, 'hunter_house': None, 'fields': None, 'bar': None
         }
 
         self.money = 0
@@ -119,50 +119,115 @@ class GamePlay:
 
 
     def level_to_up(self, level):
-        if level == TownSquare:
-            self.seconds_to_upgrade_town_square = level.time_for_next_lvl
-        if level == Bar:
-            self.seconds_to_upgrade_bar = level.time_for_next_lvl
-        if level == Fields:
-            self.seconds_to_upgrade_fields = level.time_for_next_lvl
-        if level == HunterHouse:
-            self.seconds_to_upgrade_hunter_house = level.time_for_next_lvl
-        if level == Market:
-            self.seconds_to_upgrade_market = level.time_for_next_lvl
-        if level == Tower:
-            self.seconds_to_upgrade_tower = level.time_for_next_lvl
-        if level == WarHouse:
-            self.seconds_to_upgrade_war_house = level.time_for_next_lvl
-        if level == WoodHouse:
-            self.seconds_to_upgrade_wood_house = level.time_for_next_lvl
+        if type(level) == TownSquare:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.wheat_for_next_lvl = int(level.wheat_for_next_lvl * 1.125)
+            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.time_for_citizen -= 5
+            level.time_for_money_pack -= 5
+            level.money_per_citizen += 0.1
+            level.max_citizens += 50
+
+            level.cur_level += 1
+
+        if type(level) == Bar:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.skins_for_next_lvl = int(level.skins_for_next_lvl * 1.125)
+            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.time_for_archer -= 5
+            level.max_archers += 50
+
+            level.cur_level += 1
+
+
+        if type(level) == Fields:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.time_for_res_pack -= 5
+            level.res_per_worker += 0.1
+
+            level.cur_level += 1
+
+
+        if type(level) == HunterHouse:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.time_for_res_pack -= 5
+            level.res_per_worker += 0.1
+
+            level.cur_level += 1
+
+
+        if type(level) == Market:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.skins_for_next_lvl = int(level.skins_for_next_lvl * 1.125)
+            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
+            level.wheat_for_next_lvl = int(level.wheat_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.taxes -= 0.1
+
+            level.cur_level += 1
 
 
 
+        if type(level) == Tower:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
 
-    async def upgrade_level(self, level_for_up, level_slug):
+            level.cur_level += 1
+
+        if type(level) == WarHouse:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.skins_for_next_lvl = int(level.skins_for_next_lvl * 1.125)
+            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.time_for_knight -= 5
+            level.max_knights += 50
+
+            level.cur_level += 1
+
+
+        if type(level) == WoodHouse:
+            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
+            level.time_for_next_lvl += 300
+            level.time_for_res_pack -= 5
+            level.res_per_worker += 0.1
+
+            level.cur_level += 1
+
+        return level
+
+
+
+    async def upgrade_level(self, level_slug):
         session = async_session_maker()
         async with session:
-            level = await self.get_obj_by_user_id(session, level_for_up)
-            inventory = await self.get_obj_by_user_id(session, Inventory)
+            level = await self.get_obj_by_user_id(session, model_by_slug[level_slug])
 
-        self.level_to_up(level_for_up)
+        self.seconds_to_upgrade[level_slug] = level.time_for_next_lvl
 
 
-        while self.seconds_to_money > 0:
-            if self.seconds_to_money >= 60:
-                print(f"До нового мешка с монетами у игрока {self.user_id} осталось {int((self.seconds_to_money / 60))} минуты")
+        while self.seconds_to_upgrade[level_slug] > 0:
+            if self.seconds_to_upgrade[level_slug] >= 60:
+                print(f"До улучшения {level_slug}  у игрока {self.user_id} осталось {int((self.seconds_to_upgrade[level_slug] / 60))} минуты")
                 await asyncio.sleep(60)
-                self.seconds_to_money -= 60
+                self.seconds_to_upgrade[level_slug] -= 60
             else:
-                print(f"До нового мешка с монетами у игрока {self.user_id} осталось меньше минуты")
-                await asyncio.sleep(self.seconds_to_money)
-                self.seconds_to_money = 0
+                print(f"До обновления {level_slug}  у игрока {self.user_id} осталось меньше минуты")
+                await asyncio.sleep(self.seconds_to_upgrade[level_slug])
+                self.seconds_to_upgrade[level_slug] = 0
+
+        self.seconds_to_upgrade[level_slug] = None
 
 
         async with session:
-            inventory = await self.get_obj_by_user_id(session, Inventory)
-            inventory.money += money_pack
-            print(f"С горожан у игрока {self.user_id} собрано: {money_pack}")
+            level = await self.get_obj_by_user_id(session, model_by_slug[level_slug])
+            level = self.level_to_up(level)
+            session.add(level)
+            print(f"Строение игрока {self.user_id} улучшено")
             await session.commit()
 
 

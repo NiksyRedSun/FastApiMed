@@ -66,6 +66,7 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     if slug is not None:
         dict_context['level_info'] = level_info[slug]
         dict_context['level_slug'] = slug
+        dict_context['secs_to_upgrade'] = gameplay.seconds_to_upgrade[slug]
 
         async with session:
             dict_context['level'] = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])

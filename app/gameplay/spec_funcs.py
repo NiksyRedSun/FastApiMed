@@ -2,7 +2,7 @@ from app.levels.models import *
 
 
 model_by_slug = {'town_square': TownSquare, 'wood_house': WoodHouse, 'war_house': WarHouse, 'tower': Tower,
-                 'market': Market, 'hhunter_house': HunterHouse, 'fields': Fields, 'bar': Bar}
+                 'market': Market, 'hunter_house': HunterHouse, 'fields': Fields, 'bar': Bar}
 
 
 
@@ -51,3 +51,15 @@ def check_inv(level, inventory: Inventory):
         if inventory.skins < level.skins_for_next_lvl:
             return False
     return True
+
+def take_inv(level, inventory: Inventory):
+    if hasattr(level, 'money_for_next_lvl'):
+        inventory.money -= level.money_for_next_lvl
+    if hasattr(level, 'wheat_for_next_lvl'):
+        inventory.wheat -= level.wheat_for_next_lvl
+    if hasattr(level, 'wood_for_next_lvl'):
+        inventory.wood -= level.wood_for_next_lvl
+    if hasattr(level, 'skins_for_next_lvl'):
+        inventory.skins -= level.skins_for_next_lvl
+    return inventory
+

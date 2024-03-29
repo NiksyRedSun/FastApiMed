@@ -7,15 +7,15 @@
         <img src="{{ url_for('static', path=context.level_info.img_link) }}" alt={{context.level_info.name}}>
         <div class="in_menu_point_block">
             <div class="menu_par_name">{{context.level_info.name}}</div>
-            <div class="menu_par_lvl">Уровень: 0</div>
+            <div class="menu_par_lvl">Уровень: {{context.level.cur_level}}</div>
         </div>
         <div class="menu_par_descr">{{context.level_info.descr}}</div>
         {% block menu_content %}
         {% endblock %}
 
         <div class="upgrade">
+            {% if context.secs_to_upgrade is none %}
             <div class="upgrade_line">
-
             <div class="upgrade_info">Улучшить за</div>
 
             {% if context.level.money_for_next_lvl %}
@@ -42,7 +42,14 @@
             <a href="{{ url_for('upgrade_level', slug=context.level_slug) }}">Улучшить</a>
             </div>
 
-            <div class="menu_par_info">До улучшения осталось 5 минут....</div>
+            {% else %}
+            {% if context.secs_to_upgrade == 0 %}
+            <div class="menu_par_info">До улучшения осталось совсем чуть-чуть</div>
+            {% else %}
+            <div class="menu_par_info">До улучшения осталось {{ context.secs_to_mins(context.secs_to_upgrade) }}</div>
+            {% endif %}
+            {% endif %}
+
             {% if message is not none %}
             <div class="{{ request.query_params.get('message_class') }}">{{ message }}</div>
             {% endif %}
