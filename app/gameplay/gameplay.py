@@ -126,7 +126,7 @@ class GamePlay:
             level.time_for_next_lvl += 300
             level.time_for_citizen -= 5
             level.time_for_money_pack -= 5
-            level.money_per_citizen += 0.1
+            level.money_per_citizen = round(level.money_per_citizen + 0.1, 1)
             level.max_citizens += 50
 
             level.cur_level += 1
@@ -146,7 +146,7 @@ class GamePlay:
             level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
             level.time_for_next_lvl += 300
             level.time_for_res_pack -= 5
-            level.res_per_worker += 0.1
+            level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
             level.cur_level += 1
 
@@ -155,7 +155,7 @@ class GamePlay:
             level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
             level.time_for_next_lvl += 300
             level.time_for_res_pack -= 5
-            level.res_per_worker += 0.1
+            level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
             level.cur_level += 1
 
@@ -194,7 +194,7 @@ class GamePlay:
             level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
             level.time_for_next_lvl += 300
             level.time_for_res_pack -= 5
-            level.res_per_worker += 0.1
+            level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
             level.cur_level += 1
 
