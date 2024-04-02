@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_async_session, async_session_maker
 from app.levels.models import *
 from sqlalchemy.orm import selectinload
-from app.gameplay.spec_funcs import check_inv, model_by_slug
+from app.gameplay.spec_funcs import check_inv, model_by_slug, standart_level_up
 
 
 gameplays = {}
@@ -22,8 +22,6 @@ async def start_game():
             loop = asyncio.get_event_loop()
             gameplays[user.id] = GamePlay(user.id, loop)
             gameplays[user.id].start_everything()
-
-
 
 
 
@@ -119,84 +117,40 @@ class GamePlay:
 
 
     def level_to_up(self, level):
+
+        level = standart_level_up(level)
+
         if type(level) == TownSquare:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.wheat_for_next_lvl = int(level.wheat_for_next_lvl * 1.125)
-            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
             level.time_for_citizen -= 5
             level.time_for_money_pack -= 5
             level.money_per_citizen = round(level.money_per_citizen + 0.1, 1)
             level.max_citizens += 50
 
-            level.cur_level += 1
-
         if type(level) == Bar:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.skins_for_next_lvl = int(level.skins_for_next_lvl * 1.125)
-            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
             level.time_for_archer -= 5
             level.max_archers += 50
 
-            level.cur_level += 1
-
-
         if type(level) == Fields:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
             level.time_for_res_pack -= 5
             level.res_per_worker = round(level.res_per_worker + 0.1, 1)
-
-            level.cur_level += 1
-
 
         if type(level) == HunterHouse:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
             level.time_for_res_pack -= 5
             level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
-            level.cur_level += 1
-
-
         if type(level) == Market:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.skins_for_next_lvl = int(level.skins_for_next_lvl * 1.125)
-            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
-            level.wheat_for_next_lvl = int(level.wheat_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
-            level.taxes -= 0.1
-
-            level.cur_level += 1
-
-
+            level.taxes = round(level.taxes - 0.1, 1)
 
         if type(level) == Tower:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
-
-            level.cur_level += 1
+            pass
 
         if type(level) == WarHouse:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.skins_for_next_lvl = int(level.skins_for_next_lvl * 1.125)
-            level.wood_for_next_lvl = int(level.wood_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
             level.time_for_knight -= 5
             level.max_knights += 50
 
-            level.cur_level += 1
-
-
         if type(level) == WoodHouse:
-            level.money_for_next_lvl = int(level.money_for_next_lvl * 1.125)
-            level.time_for_next_lvl += 300
             level.time_for_res_pack -= 5
             level.res_per_worker = round(level.res_per_worker + 0.1, 1)
-
-            level.cur_level += 1
 
         return level
 

@@ -6,7 +6,7 @@
     <div class="in_menu_point">
         <img src="{{ url_for('static', path=context.level_info.img_link) }}" alt={{context.level_info.name}}>
         <div class="in_menu_point_block">
-            <div class="menu_par_name">{{context.level_info.name}}</div>
+            <div class="menu_par_name">{{context.level_info.full_name}}</div>
             <div class="menu_par_lvl">Уровень: {{context.level.cur_level}}</div>
         </div>
         <div class="menu_par_descr">{{context.level_info.descr}}</div>

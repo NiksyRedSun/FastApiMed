@@ -3,36 +3,12 @@
 
 
 {% block content %}
-    <a class="post" href="{{ url_for('get_level', slug='town_square') }}">
-        <img src="{{ url_for('static', path='images/cards/256/town_square.png') }}" alt="Площадь">
-        <p>Площадь</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='war_house') }}">
-        <img src="{{ url_for('static', path='images/cards/256/war_house.png') }}" alt="Казармы">
-        <p>Казармы</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='bar') }}">
-        <img src="{{ url_for('static', path='images/cards/256/bar.png') }}" alt="Таверна">
-        <p>Таверна</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='market') }}">
-        <img src="{{ url_for('static', path='images/cards/256/market.png') }}" alt="Рынок">
-        <p>Рынок</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='fields') }}">
-        <img src="{{ url_for('static', path='images/cards/256/fields.png') }}" alt="Поля">
-        <p>Поля</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='wood_house') }}">
-        <img src="{{ url_for('static', path='images/cards/256/wood_house.png') }}" alt="Дом дровосека">
-        <p>Дом лесоруба</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='hunter_house') }}">
-        <img src="{{ url_for('static', path='images/cards/256/hunter_house.png') }}" alt="Лачуга охотника">
-        <p>Лачуга охотника</p>
-    </a>
-    <a class="post" href="{{ url_for('get_level', slug='tower') }}">
-        <img src="{{ url_for('static', path='images/cards/256/tower.png') }}" alt="Сторожевая башня">
-        <p>Сторожевая башня</p>
-    </a>
+    {% for level in context.levels_info%}
+    <div class="post">
+        <p class="lvl_lvl">Уровень: 1</p>
+        <a href="{{ url_for('get_level', slug=level.slug) }}"><img src="{{ url_for('static', path=level.img_link) }}" alt="{{ level.short_name }}"></a>
+        <a href="{{ url_for('get_level', slug=level.slug) }}">{{ level.short_name }}</a>
+        <a class="up" href="{{ url_for('upgrade_level', slug=level.slug) }}">Улучшить</a>
+    </div>
+    {% endfor %}
 {% endblock %}

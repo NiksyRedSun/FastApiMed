@@ -10,37 +10,67 @@ body {
 }
 
 
-a.post{
+div.post{
     margin: 2% 1% 3% 1%;
     width: 25.5%;
     border: solid #b87333 6pt;
     border-radius: 45px;
     background-color: #c39964;
     text-align: center;
-    padding-bottom: 1%;
+    padding: 1% 0% 0.5% 0%;
     display: inline-block;
-    text-decoration: none;
-    color: #555555;
     font-family: "MedievalSharp", cursive;
-    font-size: 27pt;
     font-weight: 700;
     transition: all, 0.3s, ease, 0.3s;
 }
 
-a.post:hover{
-    color: #ffd700;
+div.post:hover{
     transform: translateY(-7%);
 }
 
-a.post img{
-    margin: 10% 5% 0.5% 5%;
+div.post img{
+    margin: 3% 5% 0.5% 5%;
     border-radius: 45px;
     border: solid #b87333 6pt;
     width: 80%;
 }
 
-a.post > p {
+div.post > a {
     margin: 0% 0% 0% 0%;
+    text-decoration: none;
+    color: #555555;
+    transition: all, 0.3s, ease, 0.3s;
+    font-size: 25pt;
+}
+
+div.post > a:hover {
+    color: #57d0ce;
+}
+
+div.post > a.up {
+    margin: 1% auto 0% auto;
+    text-decoration: none;
+    transition: all, 0.3s, ease, 0.3s;
+    font-size: 15pt;
+    display: block;
+    border: solid #790604 3pt;
+    border-radius: 10px;
+    background: #891614;
+    color: #f9e3be;
+    width: 50%;
+}
+
+div.post > a.up:hover {
+    background: #790604;
+}
+
+
+p.lvl_lvl {
+    margin: 0% 0% 0% 0%;
+    font-size: 20pt;
+    color: #808000;
+    text-align: left;
+    padding-left: 10%;
 }
 
 div.post.char{
