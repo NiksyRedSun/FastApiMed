@@ -21,11 +21,11 @@ div.post{
     display: inline-block;
     font-family: "MedievalSharp", cursive;
     font-weight: 700;
-    transition: all, 0.3s, ease, 0.3s;
+    transition: all, 0.6s, ease, 0.6s;
 }
 
 div.post:hover{
-    transform: translateY(-7%);
+    transform: translateY(-3%);
 }
 
 div.post img{
@@ -76,7 +76,7 @@ div.post > p.up {
 
 p.lvl_lvl {
     margin: 0% 0% 0% 0%;
-    font-size: 20pt;
+    font-size: 23pt;
     color: #808000;
     text-align: left;
     padding-left: 10%;
@@ -238,6 +238,15 @@ form.cit_set {
     justify-content: center;
 }
 
+form.city_name {
+    margin: 0% auto 0% auto;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
 div.cit_set_level1 {
     width: 100%;
     display: flex;
@@ -274,6 +283,7 @@ div.person_and_num input {
 
 form {
     width: 50%;
+    padding-bottom: 2%;
 }
 
 form.items {

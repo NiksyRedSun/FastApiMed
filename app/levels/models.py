@@ -133,6 +133,7 @@ class TownSquare(Base):
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
     cur_level = Column("cur_level", Integer, default=1)
+    city_name = Column("city_name", String, default=None, nullable=True)
 
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     wheat_for_next_lvl = Column("wheat_for_next_lvl", Integer, default=10)

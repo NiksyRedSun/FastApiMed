@@ -35,7 +35,11 @@
             <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Шкуры" class="res">
             <div class="num">{{context.inventory.skins}}</div>
         </div>
+        {% if context.city_name is not none %}
+        <div class="cityname"><a href="{{ url_for('get_menu')}}">{{ context.city_name }}</a></div>
+        {% else %}
         <div class="cityname"><a href="{{ url_for('get_menu')}}">Здесь будет название города</a></div>
+        {% endif %}
     </div>
 
     <a class="top_menu" href="">

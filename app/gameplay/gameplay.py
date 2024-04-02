@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_async_session, async_session_maker
 from app.levels.models import *
 from sqlalchemy.orm import selectinload
-from app.gameplay.spec_funcs import check_inv, model_by_slug, standart_level_up
+from app.gameplay.spec_funcs import check_inv, model_by_slug, standart_level_up, level_to_up
 
 
 gameplays = {}
@@ -52,11 +52,19 @@ class GamePlay:
 
 
     async def get_obj_by_user_id(self, session: AsyncSession, obj_model):
-        query = select(obj_model).where(obj_model.user_id == self.user_id)
-        result = await session.execute(query)
-        obj = result.scalar_one()
+        async with session:
+            query = select(obj_model).where(obj_model.user_id == self.user_id)
+            result = await session.execute(query)
+            obj = result.scalar_one()
         return obj
 
+
+    async def change_city_name(self, session: AsyncSession, city_name: str):
+        town_square = await self.get_obj_by_user_id(session, TownSquare)
+        town_square.city_name = city_name
+        async with session:
+            session.add(town_square)
+            await session.commit()
 
 
     async def make_citizen(self):
@@ -116,44 +124,6 @@ class GamePlay:
 
 
 
-    def level_to_up(self, level):
-
-        level = standart_level_up(level)
-
-        if type(level) == TownSquare:
-            level.time_for_citizen -= 5
-            level.time_for_money_pack -= 5
-            level.money_per_citizen = round(level.money_per_citizen + 0.1, 1)
-            level.max_citizens += 50
-
-        if type(level) == Bar:
-            level.time_for_archer -= 5
-            level.max_archers += 50
-
-        if type(level) == Fields:
-            level.time_for_res_pack -= 5
-            level.res_per_worker = round(level.res_per_worker + 0.1, 1)
-
-        if type(level) == HunterHouse:
-            level.time_for_res_pack -= 5
-            level.res_per_worker = round(level.res_per_worker + 0.1, 1)
-
-        if type(level) == Market:
-            level.taxes = round(level.taxes - 0.1, 1)
-
-        if type(level) == Tower:
-            pass
-
-        if type(level) == WarHouse:
-            level.time_for_knight -= 5
-            level.max_knights += 50
-
-        if type(level) == WoodHouse:
-            level.time_for_res_pack -= 5
-            level.res_per_worker = round(level.res_per_worker + 0.1, 1)
-
-        return level
-
 
 
     async def upgrade_level(self, level_slug):
@@ -179,7 +149,7 @@ class GamePlay:
 
         async with session:
             level = await self.get_obj_by_user_id(session, model_by_slug[level_slug])
-            level = self.level_to_up(level)
+            level = level_to_up(level)
             session.add(level)
             print(f"Строение игрока {self.user_id} улучшено")
             await session.commit()

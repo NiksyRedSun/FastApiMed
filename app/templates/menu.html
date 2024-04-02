@@ -12,7 +12,7 @@
         {% if context.levels_upgrade_info[level.slug] is none %}
         <a class="up" href="{{ url_for('upgrade_level', slug=level.slug) }}">Улучшить</a>
         {% else %}
-        <p class="up">Улучшается...</p>
+        <p class="up">{{ context.secs_to_mins(context.levels_upgrade_info[level.slug]) }}</p>
         {% endif %}
     </div>
     {% endfor %}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, FastAPI, HTTPException
+from fastapi import APIRouter, Request, Depends, FastAPI, HTTPException, Form
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from config import templates
@@ -19,6 +19,12 @@ router = APIRouter(
     tags=["level"]
 )
 
+def check_city_name(city_name: str):
+    if len(city_name) < 4:
+        return "Длина названия от 4х символов"
+    if len(city_name) > 16:
+        return "Длина названия до 16и символов"
+    return True
 
 
 
@@ -49,7 +55,7 @@ async def upgrade_level(request: Request, slug: str, session: AsyncSession = Dep
             return RedirectResponse(request.url_for('login_get'), status_code=302)
         else:
             gameplay = gameplays[user.id]
-            print()
+
             async with session:
                 inventory = await gameplay.get_obj_by_user_id(session, Inventory)
                 level = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
@@ -73,6 +79,31 @@ async def upgrade_level(request: Request, slug: str, session: AsyncSession = Dep
 
                 elif request.headers.get('referer') == request.url_for("get_menu"):
                     return RedirectResponse(request.url_for("get_menu"))
+
+    # except Exception as e:
+    #     return {
+    #         "status": "error",
+    #         "data": e,
+    #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+    #     }
+
+
+@router.post("/change_city_name")
+async def change_city_name(request: Request, session: AsyncSession = Depends(get_async_session), user: User | None = Depends(current_user),
+                    city_name: str = Form(default='')):
+    # try:
+        if user is None:
+            return RedirectResponse(request.url_for('login_get'), status_code=302)
+        else:
+            result = check_city_name(city_name)
+            if type(result) == str:
+                return RedirectResponse(request.url_for("get_level", slug='town_square').include_query_params(message=result, message_class='error'), status_code=302)
+
+            else:
+                gameplay = gameplays[user.id]
+                await gameplay.change_city_name(session, city_name)
+                return RedirectResponse(request.url_for("get_level", slug='town_square').include_query_params(message='Название города успешно изменено', message_class='success'), status_code=302)
+
 
     # except Exception as e:
     #     return {

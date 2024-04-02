@@ -46,13 +46,14 @@ level_info = {'town_square': {'short_name': 'Площадь', 'full_name': 'Го
             }
 
 
-async def get_levels_lvl(session: AsyncSession, gameplay):
-    levels_lvl_dict = dict()
-    for level in level_info:
-        query = select(model_by_slug[level].cur_level).where(model_by_slug[level].user_id == gameplay.user_id)
-        pre_result = await session.execute(query)
-        levels_lvl_dict[level] = pre_result.scalar_one()
-    return levels_lvl_dict
+async def get_levels_lvls(session: AsyncSession, gameplay):
+    levels_lvls_dict = dict()
+    async with session:
+        for level in level_info:
+            query = select(model_by_slug[level].cur_level).where(model_by_slug[level].user_id == gameplay.user_id)
+            result = await session.execute(query)
+            levels_lvls_dict[level] = result.scalar_one()
+    return levels_lvls_dict
 
 
 
@@ -67,10 +68,14 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     dict_context["secs_to_mins"] = seconds_to_minutes
     dict_context["secs_to_mins_in_nums"] = seconds_to_minutes_in_nums
 
-    #инвентарь
+    #инвентарь и название города
     async with session:
         inventory = await gameplay.get_obj_by_user_id(session, Inventory)
         dict_context['inventory'] = inventory
+
+        query = select(TownSquare.city_name).where(TownSquare.user_id == gameplay.user_id)
+        result = await session.execute(query)
+        dict_context['city_name'] = result.scalar_one()
 
     #материал по уровням
     if slug is not None:
@@ -92,7 +97,7 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     else:
         dict_context['levels_info'] = level_info.values()
         dict_context['levels_upgrade_info'] = gameplay.seconds_to_upgrade
-        dict_context['levels_lvls'] = await get_levels_lvl(session, gameplay)
+        dict_context['levels_lvls'] = await get_levels_lvls(session, gameplay)
 
 
     return dict_context

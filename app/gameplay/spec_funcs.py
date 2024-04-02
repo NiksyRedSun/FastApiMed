@@ -10,9 +10,22 @@ model_by_slug = {'town_square': TownSquare, 'wood_house': WoodHouse, 'war_house'
 def seconds_to_minutes(seconds):
     if seconds > 60:
         minutes = seconds // 60
-        if minutes == 1:
+        half_minutes = minutes % 10
+        if minutes == 10:
+            return "10 минут"
+        elif minutes == 11:
+            return "11 минут"
+        elif minutes == 12:
+            return "12 минут"
+        elif minutes == 13:
+            return f"13 минут"
+        elif minutes == 14:
+            return f"14 минут"
+        elif minutes == 1:
             return "1 минута"
-        elif 2 <= minutes <= 4:
+        elif minutes == 21:
+            return "21 минута"
+        elif 2 <= half_minutes <= 4:
             return f"{minutes} минуты"
         else:
             return f"{minutes} минут"
@@ -81,6 +94,44 @@ def standart_level_up(level):
 
     level.time_for_next_lvl += 150
     level.cur_level += 1
+
+    return level
+
+
+def level_to_up(level):
+
+    level = standart_level_up(level)
+    if type(level) == TownSquare:
+        level.time_for_citizen -= 5
+        level.time_for_money_pack -= 5
+        level.money_per_citizen = round(level.money_per_citizen + 0.1, 1)
+        level.max_citizens += 50
+
+    if type(level) == Bar:
+        level.time_for_archer -= 5
+        level.max_archers += 50
+
+    if type(level) == Fields:
+        level.time_for_res_pack -= 5
+        level.res_per_worker = round(level.res_per_worker + 0.1, 1)
+
+    if type(level) == HunterHouse:
+        level.time_for_res_pack -= 5
+        level.res_per_worker = round(level.res_per_worker + 0.1, 1)
+
+    if type(level) == Market:
+        level.taxes = round(level.taxes - 0.1, 1)
+
+    if type(level) == Tower:
+        pass
+
+    if type(level) == WarHouse:
+        level.time_for_knight -= 5
+        level.max_knights += 50
+
+    if type(level) == WoodHouse:
+        level.time_for_res_pack -= 5
+        level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
     return level
 
