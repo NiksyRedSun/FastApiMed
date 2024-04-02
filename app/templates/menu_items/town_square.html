@@ -9,8 +9,10 @@
     {% else %}
     <p class="linename">Изменить название города:</p><input name="city_name" type="text">
     {% endif %}
-
     <input type="submit" class="subm">
+    {% if form_message is not none %}
+    <p class="{{ form_message_class }}">{{ form_message }}</p>
+    {% endif %}
 </form>
 
 <div class="stat_info">

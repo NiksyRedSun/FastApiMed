@@ -30,14 +30,16 @@ def check_city_name(city_name: str):
 
 @router.get("/{slug}")
 async def get_level(request: Request, slug: str, session: AsyncSession = Depends(get_async_session),
-                    user: User | None = Depends(current_user), message: str = None, message_class: str = None):
+                    user: User | None = Depends(current_user), message: str = None, message_class: str = None,
+                    form_message: str = None, form_message_class: str = None):
     # try:
         if user is None:
             return RedirectResponse(request.url_for('login_get'), status_code=302)
         else:
             context = await make_context(session, user, slug)
             return templates.TemplateResponse(f"menu_items/{slug}.html", {"request": request, "context": context,
-                                                                          'message': message, 'message_class': message_class})
+                                                                          'message': message, 'message_class': message_class,
+                                                                          'form_message': form_message, 'form_message_class': form_message_class})
 
 
     # except Exception as e:
@@ -97,12 +99,12 @@ async def change_city_name(request: Request, session: AsyncSession = Depends(get
         else:
             result = check_city_name(city_name)
             if type(result) == str:
-                return RedirectResponse(request.url_for("get_level", slug='town_square').include_query_params(message=result, message_class='error'), status_code=302)
+                return RedirectResponse(request.url_for("get_level", slug='town_square').include_query_params(form_message=result, form_message_class='error'), status_code=302)
 
             else:
                 gameplay = gameplays[user.id]
                 await gameplay.change_city_name(session, city_name)
-                return RedirectResponse(request.url_for("get_level", slug='town_square').include_query_params(message='Название города успешно изменено', message_class='success'), status_code=302)
+                return RedirectResponse(request.url_for("get_level", slug='town_square').include_query_params(form_message='Изменение успешно', form_message_class='success'), status_code=302)
 
 
     # except Exception as e:
