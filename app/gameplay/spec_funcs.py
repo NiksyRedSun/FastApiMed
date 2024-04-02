@@ -66,7 +66,7 @@ def take_inv(level, inventory: Inventory):
 
 
 def check_and_take(session: AsyncSession, gameplay):
-
+    pass
 
 
 def standart_level_up(level):

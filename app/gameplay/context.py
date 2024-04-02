@@ -14,7 +14,7 @@ from app.gameplay.spec_funcs import model_by_slug
 
 
 
-level_info = { 'town_square': {'short_name': 'Площадь', 'full_name': 'Городская площадь', 'img_link': 'images/cards/256/town_square.png', 'slug': 'town_square',
+level_info = {'town_square': {'short_name': 'Площадь', 'full_name': 'Городская площадь', 'img_link': 'images/cards/256/town_square.png', 'slug': 'town_square',
                               'descr': 'Городская площадь, здесь собираются крестьяне из окрестных деревень, превращаясь в горожан. Улучшите городскую площадь и вы будете привлекать больше крестьян, а также собирать с них больше налогов за меньшее время.'},
 
             'war_house': {'short_name': 'Казармы', 'full_name': 'Городские казармы', 'img_link': 'images/cards/256/war_house.png', 'slug': 'war_house',
@@ -43,9 +43,16 @@ level_info = { 'town_square': {'short_name': 'Площадь', 'full_name': 'Г�
             'tower': {'short_name': 'Сторожевая башня', 'full_name': 'Сторожевая башня', 'img_link': 'images/cards/256/tower.png', 'slug': 'tower',
                         'descr': 'Сторожевая башня. Чтобы наблюдать, не наблюдает ли кто-нибудь за вами. Улучшение сторожевой башни приведет к уменьшению времени, которое потребуется чтобы добраться до других игроков.'},
 
-
-
             }
+
+
+async def get_levels_lvl(session: AsyncSession, gameplay):
+    levels_lvl_dict = dict()
+    for level in level_info:
+        query = select(model_by_slug[level].cur_level).where(model_by_slug[level].user_id == gameplay.user_id)
+        pre_result = await session.execute(query)
+        levels_lvl_dict[level] = pre_result.scalar_one()
+    return levels_lvl_dict
 
 
 
@@ -84,7 +91,8 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
 
     else:
         dict_context['levels_info'] = level_info.values()
-
+        dict_context['levels_upgrade_info'] = gameplay.seconds_to_upgrade
+        dict_context['levels_lvls'] = await get_levels_lvl(session, gameplay)
 
 
     return dict_context

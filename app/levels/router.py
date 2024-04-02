@@ -43,12 +43,13 @@ async def get_level(request: Request, slug: str, session: AsyncSession = Depends
 
 
 @router.get("/upgrade/{slug}")
-async def upgrade_level(request: Request, slug: str, session: AsyncSession = Depends(get_async_session), user: User | None = Depends(current_user), sending_page: str = None):
+async def upgrade_level(request: Request, slug: str, session: AsyncSession = Depends(get_async_session), user: User | None = Depends(current_user)):
     # try:
         if user is None:
             return RedirectResponse(request.url_for('login_get'), status_code=302)
         else:
             gameplay = gameplays[user.id]
+            print()
             async with session:
                 inventory = await gameplay.get_obj_by_user_id(session, Inventory)
                 level = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
@@ -61,10 +62,17 @@ async def upgrade_level(request: Request, slug: str, session: AsyncSession = Dep
 
                 gameplay.loop.create_task(gameplay.upgrade_level(slug))
 
-                return RedirectResponse(request.url_for(sending_page, slug=slug).include_query_params(message='Улучшение запущено', message_class='success'), status_code=302)
-            else:
-                return RedirectResponse(request.url_for(sending_page, slug=slug).include_query_params(message='Не хватает ресурсов для улучшения', message_class='error'), status_code=302)
+                if request.headers.get('referer') == request.url_for("get_level", slug=slug):
+                    return RedirectResponse(request.url_for("get_level", slug=slug).include_query_params(message='Улучшение запущено', message_class='success'), status_code=302)
 
+                elif request.headers.get('referer') == request.url_for("get_menu"):
+                    return RedirectResponse(request.url_for("get_menu"))
+            else:
+                if request.headers.get('referer') == request.url_for("get_level", slug=slug):
+                    return RedirectResponse(request.url_for("get_level", slug=slug).include_query_params(message='Не хватает ресурсов для улучшения', message_class='error'), status_code=302)
+
+                elif request.headers.get('referer') == request.url_for("get_menu"):
+                    return RedirectResponse(request.url_for("get_menu"))
 
     # except Exception as e:
     #     return {

@@ -14,6 +14,7 @@ from app.auth.router import router as auth_router
 from app.gameplay.gameplay import start_game
 from contextlib import asynccontextmanager
 from app.gameplay.context import make_context
+from app.levels.models import *
 
 
 @asynccontextmanager
@@ -58,7 +59,7 @@ async def test_router(request: Request):
         # Получить объект
         # print(await session.get(User, 1))
         # Можно делать запросы сразу с нескольких таблиц, в документации показано, как
-        query = select(User).where(User.id == 1)
+        query = select(TownSquare.cur_level).where(TownSquare.user_id == 1)
         pre_result = await session.execute(query)
 
         # print(type(pre_result))

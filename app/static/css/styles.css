@@ -64,6 +64,15 @@ div.post > a.up:hover {
     background: #790604;
 }
 
+div.post > p.up {
+    margin: 1% auto 0% auto;
+    text-decoration: none;
+    font-size: 15pt;
+    display: block;
+    color: #790604;
+    width: 50%;
+}
+
 
 p.lvl_lvl {
     margin: 0% 0% 0% 0%;

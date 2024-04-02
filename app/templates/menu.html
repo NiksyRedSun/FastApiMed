@@ -3,12 +3,17 @@
 
 
 {% block content %}
-    {% for level in context.levels_info%}
+    {% for level in context.levels_info %}
     <div class="post">
-        <p class="lvl_lvl">Уровень: 1</p>
+        <p class="lvl_lvl">Уровень: {{ context.levels_lvls[level.slug] }}</p>
         <a href="{{ url_for('get_level', slug=level.slug) }}"><img src="{{ url_for('static', path=level.img_link) }}" alt="{{ level.short_name }}"></a>
         <a href="{{ url_for('get_level', slug=level.slug) }}">{{ level.short_name }}</a>
+
+        {% if context.levels_upgrade_info[level.slug] is none %}
         <a class="up" href="{{ url_for('upgrade_level', slug=level.slug) }}">Улучшить</a>
+        {% else %}
+        <p class="up">Улучшается...</p>
+        {% endif %}
     </div>
     {% endfor %}
 {% endblock %}
