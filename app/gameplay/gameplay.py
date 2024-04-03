@@ -38,11 +38,6 @@ class GamePlay:
         self.seconds_to_new_knight = None
         self.seconds_to_new_archer = None
 
-        self.seconds_to_money = None
-        self.seconds_to_skins = None
-        self.seconds_to_wood = None
-        self.seconds_to_wheat = None
-
         self.seconds_to_upgrade = {
                             'town_square': None, 'wood_house': None, 'war_house': None, 'tower': None,
                              'market': None, 'hunter_house': None, 'fields': None, 'bar': None
@@ -59,12 +54,48 @@ class GamePlay:
         return obj
 
 
+
     async def change_city_name(self, session: AsyncSession, city_name: str):
-        town_square = await self.get_obj_by_user_id(session, TownSquare)
-        town_square.city_name = city_name
         async with session:
+            town_square = await self.get_obj_by_user_id(session, TownSquare)
+            town_square.city_name = city_name
             session.add(town_square)
             await session.commit()
+
+
+    # вернет true - если все круто, вернет str, если есть проблемы
+    async def distribute_workers(self, session: AsyncSession, citizens: int, workers: int, model):
+        town_square = await self.get_obj_by_user_id(session, TownSquare)
+        work_house = await self.get_obj_by_user_id(session, model)
+
+        if workers == 0 and citizens == 0:
+            return "Лучше не оставлять нули везде"
+
+        if workers + citizens != town_square.unemployed_citizens + work_house.workers:
+            return "Что-то не так с расчетами, попробуйте еще раз"
+
+        async with session:
+            work_house.workers = workers
+            town_square.unemployed_citizens = citizens
+            session.add(work_house)
+            session.add(town_square)
+            await session.commit()
+        return True
+
+
+    # вернет true - если все круто, вернет str, если есть проблемы
+    async def get_workers_from_model(self, session: AsyncSession, model, workers: int):
+        work_house = await self.get_obj_by_user_id(session, model)
+        if workers > work_house.workers:
+            return "У вас нет стольких работников"
+        town_square = await self.get_obj_by_user_id(session, TownSquare)
+        async with session:
+            work_house.workers -= workers
+            town_square.unemployed_citizens += workers
+            session.add(work_house)
+            session.add(town_square)
+            await session.commit()
+        return True
 
 
     async def make_citizen(self):
@@ -72,27 +103,34 @@ class GamePlay:
         while True:
             async with session:
                 town_square = await self.get_obj_by_user_id(session, TownSquare)
+
+
+            if town_square.citizens_in_city >= town_square.max_citizens:
+                await asyncio.sleep(60)
+                print(f"У игрока {self.user_id} - максимум граждан")
+                self.seconds_to_new_citizen = None
+
+            else:
                 self.seconds_to_new_citizen = town_square.time_for_citizen
+                while self.seconds_to_new_citizen > 0:
+                    if self.seconds_to_new_citizen >= 60:
+                        print(f"До нового гражданина у игрока {self.user_id} осталось {int((self.seconds_to_new_citizen/60))} минуты")
+                        await asyncio.sleep(60)
+                        self.seconds_to_new_citizen -= 60
+                    else:
+                        print(f"До нового гражданина у игрока {self.user_id} осталось меньше минуты")
+                        await asyncio.sleep(self.seconds_to_new_citizen)
+                        self.seconds_to_new_citizen = 0
 
 
-            while self.seconds_to_new_citizen > 0:
-                if self.seconds_to_new_citizen >= 60:
-                    print(f"До нового гражданина у игрока {self.user_id} осталось {int((self.seconds_to_new_citizen/60))} минуты")
-                    await asyncio.sleep(60)
-                    self.seconds_to_new_citizen -= 60
-                else:
-                    print(f"До нового гражданина у игрока {self.user_id} осталось меньше минуты")
-                    await asyncio.sleep(self.seconds_to_new_citizen)
-                    self.seconds_to_new_citizen = 0
-
-
-            async with session:
-                town_square = await self.get_obj_by_user_id(session, TownSquare)
-                town_square.citizens_in_city += 1
-                town_square.unemployed_citizens += 1
-                print(f"Появился один житель у игрока {self.user_id}")
-                print(f"Всего жителей у игрока {self.user_id}: {town_square.citizens_in_city}")
-                await session.commit()
+                async with session:
+                    town_square = await self.get_obj_by_user_id(session, TownSquare)
+                    town_square.citizens_in_city += 1
+                    town_square.unemployed_citizens += 1
+                    session.add(town_square)
+                    print(f"Появился один гражданин у игрока {self.user_id}")
+                    print(f"Всего граждан у игрока {self.user_id}: {town_square.citizens_in_city}")
+                    await session.commit()
 
 
 
@@ -101,28 +139,81 @@ class GamePlay:
         while True:
             async with session:
                 town_square = await self.get_obj_by_user_id(session, TownSquare)
-                self.seconds_to_money = town_square.time_for_money_pack
-                money_pack = int(town_square.money_per_citizen * town_square.unemployed_citizens)
+                money_pack = town_square.money_per_citizen * town_square.unemployed_citizens
 
 
-            while self.seconds_to_money > 0:
-                if self.seconds_to_money >= 60:
-                    print(f"До нового мешка с монетами у игрока {self.user_id} осталось {int((self.seconds_to_money / 60))} минуты")
-                    await asyncio.sleep(60)
-                    self.seconds_to_money -= 60
-                else:
-                    print(f"До нового мешка с монетами у игрока {self.user_id} осталось меньше минуты")
-                    await asyncio.sleep(self.seconds_to_money)
-                    self.seconds_to_money = 0
+            print(f"До нового мешка с монетами у игрока {self.user_id} осталось 60 секунд")
+            await asyncio.sleep(60)
 
 
             async with session:
                 inventory = await self.get_obj_by_user_id(session, Inventory)
-                inventory.money += money_pack
-                print(f"С горожан у игрока {self.user_id} собрано: {money_pack}")
+                inventory.money += round(money_pack/60, 2)
+                session.add(inventory)
+                print(f"С горожан у игрока {self.user_id} собрано: {round(money_pack/60, 2)}")
                 await session.commit()
 
 
+    async def make_wood(self):
+        session = async_session_maker()
+        while True:
+            async with session:
+                wood_house = await self.get_obj_by_user_id(session, WoodHouse)
+                wood_pack = wood_house.res_per_worker * wood_house.workers
+
+
+            print(f"До нового мешка с дровами у игрока {self.user_id} осталось 60 секунд")
+            await asyncio.sleep(60)
+
+
+            async with session:
+                inventory = await self.get_obj_by_user_id(session, Inventory)
+                inventory.wood += round(wood_pack/60, 2)
+                session.add(inventory)
+                print(f"Горожане собрали {round(wood_pack/60, 2)} дерева")
+                await session.commit()
+
+
+
+    async def make_wheat(self):
+        session = async_session_maker()
+        while True:
+            async with session:
+                fields = await self.get_obj_by_user_id(session, Fields)
+                wheat_pack = fields.res_per_worker * fields.workers
+
+
+            print(f"До нового мешка с пшеном у игрока {self.user_id} осталось 60 секунд")
+            await asyncio.sleep(60)
+
+
+            async with session:
+                inventory = await self.get_obj_by_user_id(session, Inventory)
+                inventory.wheat += round(wheat_pack/60, 2)
+                session.add(inventory)
+                print(f"Горожане собрали {round(wheat_pack/60, 2)} пшена")
+                await session.commit()
+
+
+
+    async def make_skins(self):
+        session = async_session_maker()
+        while True:
+            async with session:
+                hunter_house = await self.get_obj_by_user_id(session, HunterHouse)
+                skins_pack = hunter_house.res_per_worker * hunter_house.workers
+
+
+            print(f"До нового мешка с шкурами у игрока {self.user_id} осталось 60 секунд")
+            await asyncio.sleep(60)
+
+
+            async with session:
+                inventory = await self.get_obj_by_user_id(session, Inventory)
+                inventory.skins += round(skins_pack/60, 2)
+                session.add(inventory)
+                print(f"Горожане собрали {round(skins_pack/60, 2)} шкур")
+                await session.commit()
 
 
 
@@ -159,6 +250,9 @@ class GamePlay:
     def start_everything(self):
         self.loop.create_task(self.make_citizen())
         self.loop.create_task(self.make_money())
+        self.loop.create_task(self.make_wood())
+        self.loop.create_task(self.make_wheat())
+        self.loop.create_task(self.make_skins())
 
 
 

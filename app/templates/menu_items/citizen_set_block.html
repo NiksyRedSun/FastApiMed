@@ -1,22 +1,25 @@
 
 
-{% macro cit_set(pers_img, pers_name, min_value, cur_value, max_value) %}
+{% macro cit_set(pers_img, pers_name, min_value, max_value, cur_left_value, cur_right_value) %}
 
-<form class="cit_set">
+<form class="cit_set" action="{{ url_for('distribute_workers', slug=context.level_slug )}}" enctype="multipart/form-data" method="post">
 <div class="cit_set_level1">
     <div class="person_and_num">
         <img src="{{ url_for('static', path='images/persons/citizen.png' ) }}" alt='Горожанин'>
-        <input type="number" min="{{ min_value }}" max="{{ max_value }}" value="{{ max_value }}" class="input-value" id="left-value">
+        <input type="number" min="{{ min_value }}" max="{{ max_value }}" value="{{ cur_left_value }}" class="input-value" id="left-value" name="left_value">
     </div>
-        <input type="range" min="{{ min_value }}" max="{{ max_value }}" value="{{ min_value }}" id="slider" class="width100">
+        <input type="range" min="{{ min_value }}" max="{{ max_value }}" value="{{ cur_right_value }}" id="slider" class="width100">
     <div class="person_and_num">
         <img src="{{ url_for('static', path=pers_img) }}" alt="{{ pers_name }}">
-        <input type="number" min="{{ min_value }}" max="{{ max_value }}" value="{{ min_value }}" class="input-value" id="right-value">
+        <input type="number" min="{{ min_value }}" max="{{ max_value }}" value="{{ cur_right_value }}" class="input-value" id="right-value" name="right_value">
     </div>
 </div>
     <div class="cit_set_level2">
         <input type="submit" value="Организовать">
     </div>
+    {% if form_message is not none %}
+    <p class="{{ form_message_class }}">{{ form_message }}</p>
+    {% endif %}
 </form>
 
 

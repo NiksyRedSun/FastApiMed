@@ -15,7 +15,8 @@ from app.gameplay.spec_funcs import model_by_slug
 
 
 level_info = {'town_square': {'short_name': 'Площадь', 'full_name': 'Городская площадь', 'img_link': 'images/cards/256/town_square.png', 'slug': 'town_square',
-                              'descr': 'Городская площадь, здесь собираются крестьяне из окрестных деревень, превращаясь в горожан. Улучшите городскую площадь и вы будете привлекать больше крестьян, а также собирать с них больше налогов за меньшее время.'},
+                              'descr': 'Городская площадь, здесь собираются крестьяне из окрестных деревень, превращаясь в горожан. Улучшите городскую площадь и вы будете привлекать больше крестьян, а также собирать с них больше налогов за меньшее время. '
+                                       'Вы можете собирать налоги только с неустроенных на работы горожан.'},
 
             'war_house': {'short_name': 'Казармы', 'full_name': 'Городские казармы', 'img_link': 'images/cards/256/war_house.png', 'slug': 'war_house',
                             'cit_img': 'images/persons/knight.png', 'cit_name': 'Рыцарь',
@@ -67,11 +68,13 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     #функции
     dict_context["secs_to_mins"] = seconds_to_minutes
     dict_context["secs_to_mins_in_nums"] = seconds_to_minutes_in_nums
+    dict_context["to_int"] = int
 
     #инвентарь и название города
     async with session:
         inventory = await gameplay.get_obj_by_user_id(session, Inventory)
         dict_context['inventory'] = inventory
+
 
         query = select(TownSquare.city_name).where(TownSquare.user_id == gameplay.user_id)
         result = await session.execute(query)
@@ -86,10 +89,23 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
         async with session:
             dict_context['level'] = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
 
+            if slug in ['hunter_house', 'wood_house', 'fields']:
+                query = select(TownSquare.unemployed_citizens).where(TownSquare.user_id == gameplay.user_id)
+                uc_result = await session.execute(query)
+                query = select(model_by_slug[slug].workers).where(model_by_slug[slug].user_id == gameplay.user_id)
+                w_result = await session.execute(query)
+
+                unemployed_citizens = uc_result.scalar_one()
+                workers = w_result.scalar_one()
+
+                dict_context['max_value'] = unemployed_citizens + workers
+                dict_context['left_value'] = unemployed_citizens
+                dict_context['right_value'] = workers
+
+
         #в зависимости от уровня отправляются данные, изменяющиеся по времени
         if slug == 'town_square':
             dict_context['secs_to_cit'] = gameplay.seconds_to_new_citizen
-            dict_context['secs_to_money'] = gameplay.seconds_to_money
 
         elif slug == 'war_house':
             pass

@@ -11,10 +11,10 @@ class Inventory(Base):
 
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
-    money = Column("money", Integer, default=200)
-    wood = Column("wood", Integer, default=200)
-    wheat = Column("wheat", Integer, default=200)
-    skins = Column("skins", Integer, default=200)
+    money = Column("money", Float, default=200)
+    wood = Column("wood", Float, default=200)
+    wheat = Column("wheat", Float, default=200)
+    skins = Column("skins", Float, default=200)
     user = relationship("User", back_populates='inventory')
 
 
@@ -50,14 +50,6 @@ class Archer(Base):
 class Citizen(Base):
     __tablename__ = "citizen"
 
-    class MyEnum(enum.Enum):
-        just_citizen = 1
-        peasant = 2
-        woodcutter = 3
-        huntsman = 4
-        militia = 5
-
-
 
     id = Column("id", Integer, primary_key=True)
     user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
@@ -68,7 +60,6 @@ class Citizen(Base):
 
     hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
-    duty = Column("duty", Enum(MyEnum), default=1)
     user = relationship("User", back_populates='citizens')
 
 
@@ -83,7 +74,6 @@ class WoodHouse(Base):
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
 
-    time_for_res_pack = Column("time_for_res_pack", Integer, default=120)
     res_per_worker = Column("res_per_worker", Float, default=1)
 
     workers = Column("workers", Integer, default=0)
@@ -101,7 +91,6 @@ class Fields(Base):
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
 
-    time_for_res_pack = Column("time_for_res_pack", Integer, default=120)
     res_per_worker = Column("res_per_worker", Float, default=1)
 
     workers = Column("workers", Integer, default=0)
@@ -119,7 +108,6 @@ class HunterHouse(Base):
     money_for_next_lvl = Column("money_for_next_lvl", Integer, default=10)
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
 
-    time_for_res_pack = Column("time_for_res_pack", Integer, default=120)
     res_per_worker = Column("res_per_worker", Float, default=1)
 
     workers = Column("workers", Integer, default=0)
@@ -141,7 +129,6 @@ class TownSquare(Base):
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
 
     time_for_citizen = Column("time_for_citizen", Integer, default=30)
-    time_for_money_pack = Column("time_for_money_pack", Integer, default=30)
     money_per_citizen = Column("money_per_citizen", Float, default=1)
 
 

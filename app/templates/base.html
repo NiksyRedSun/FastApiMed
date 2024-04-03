@@ -27,13 +27,13 @@
     <div class="navblock">
         <div class="res">
             <img src="{{ url_for('static', path='images/res/money.png') }}" alt="Монеты" class="res">
-            <div class="num">{{context.inventory.money}}</div>
+            <div class="num">{{context.to_int(context.inventory.money)}}</div>
             <img src="{{ url_for('static', path='images/res/wood.png') }}" alt="Дерево" class="res">
-            <div class="num">{{context.inventory.wood}}</div>
+            <div class="num">{{context.to_int(context.inventory.wood)}}</div>
             <img src="{{ url_for('static', path='images/res/wheat.png') }}" alt="Шерсть" class="res">
-            <div class="num">{{context.inventory.wheat}}</div>
+            <div class="num">{{context.to_int(context.inventory.wheat)}}</div>
             <img src="{{ url_for('static', path='images/res/skins.png') }}" alt="Шкуры" class="res">
-            <div class="num">{{context.inventory.skins}}</div>
+            <div class="num">{{context.to_int(context.inventory.skins)}}</div>
         </div>
         {% if context.city_name is not none %}
         <div class="cityname"><a href="{{ url_for('get_menu')}}">{{ context.city_name }}</a></div>

@@ -45,7 +45,7 @@ def seconds_to_minutes_in_nums(seconds):
         if seconds == 0:
             seconds = '00'
         else:
-            seconds = f"0{minutes}"
+            seconds = f"0{seconds}"
     return f'{minutes}:{seconds}'
 
 
@@ -103,7 +103,6 @@ def level_to_up(level):
     level = standart_level_up(level)
     if type(level) == TownSquare:
         level.time_for_citizen -= 5
-        level.time_for_money_pack -= 5
         level.money_per_citizen = round(level.money_per_citizen + 0.1, 1)
         level.max_citizens += 50
 
@@ -112,11 +111,9 @@ def level_to_up(level):
         level.max_archers += 50
 
     if type(level) == Fields:
-        level.time_for_res_pack -= 5
         level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
     if type(level) == HunterHouse:
-        level.time_for_res_pack -= 5
         level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
     if type(level) == Market:
@@ -134,5 +131,12 @@ def level_to_up(level):
         level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
     return level
+
+def check_city_name(city_name: str):
+    if len(city_name) < 4:
+        return "Длина названия от 4х символов"
+    if len(city_name) > 16:
+        return "Длина названия до 16и символов"
+    return True
 
 

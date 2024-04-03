@@ -16,15 +16,19 @@
 </form>
 
 <div class="stat_info">
-    <div class="menu_par_info">Всего горожан: {{ context.level.unemployed_citizens }}</div>
+    <div class="menu_par_info">Незанятых горожан: {{ context.level.unemployed_citizens }}</div>
+    <div class="menu_par_info">Всего горожан: {{ context.level.citizens_in_city }}</div>
     <div class="menu_par_info">Максимум горожан: {{ context.level.max_citizens }}</div>
     <div class="menu_par_info">Время появления горожанина: {{ context.secs_to_mins_in_nums(context.level.time_for_citizen) }}</div>
-    <div class="menu_par_info">Время сбора налогов: {{ context.secs_to_mins_in_nums(context.level.time_for_money_pack) }}</div>
-    <div class="menu_par_info">Налогов с одного горожанина: {{ context.level.money_per_citizen }}</div>
+    <div class="menu_par_info">Налогов с одного горожанина в час: {{ context.level.money_per_citizen }}</div>
+    <div class="menu_par_info">Со всех горожан в час: {{ context.level.money_per_citizen * context.level.unemployed_citizens }}</div>
 </div>
 <div class="in_time_info">
+    {% if context.secs_to_cit is not none %}
     <div class="menu_par_info">До следующего горожанина {{context.secs_to_mins(context.secs_to_cit)}}</div>
-    <div class="menu_par_info">До следующего сбора налогов {{context.secs_to_mins(context.secs_to_money)}}</div>
+    {% else %}
+    <div class="menu_par_info">В городе максимум жителей</div>
+    {% endif %}
 </div>
 
 

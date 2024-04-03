@@ -1,8 +1,8 @@
 """'INPUTMESSAGEHERE'
 
-Revision ID: 177a9d46fcac
+Revision ID: 51bb96bed1ed
 Revises: 
-Create Date: 2024-03-11 22:13:17.479380
+Create Date: 2024-04-03 17:08:04.094094
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '177a9d46fcac'
+revision: str = '51bb96bed1ed'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -63,7 +63,6 @@ def upgrade() -> None:
     sa.Column('agility', sa.Integer(), nullable=True),
     sa.Column('hp', sa.Integer(), nullable=True),
     sa.Column('max_hp', sa.Integer(), nullable=True),
-    sa.Column('duty', sa.Enum('just_citizen', 'peasant', 'woodcutter', 'huntsman', 'militia', name='myenum'), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -73,7 +72,6 @@ def upgrade() -> None:
     sa.Column('cur_level', sa.Integer(), nullable=True),
     sa.Column('money_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('time_for_next_lvl', sa.Integer(), nullable=True),
-    sa.Column('time_for_res_pack', sa.Integer(), nullable=True),
     sa.Column('res_per_worker', sa.Float(), nullable=True),
     sa.Column('workers', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
@@ -85,7 +83,6 @@ def upgrade() -> None:
     sa.Column('cur_level', sa.Integer(), nullable=True),
     sa.Column('money_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('time_for_next_lvl', sa.Integer(), nullable=True),
-    sa.Column('time_for_res_pack', sa.Integer(), nullable=True),
     sa.Column('res_per_worker', sa.Float(), nullable=True),
     sa.Column('workers', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
@@ -94,10 +91,10 @@ def upgrade() -> None:
     op.create_table('inventory',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('money', sa.Integer(), nullable=True),
-    sa.Column('wood', sa.Integer(), nullable=True),
-    sa.Column('wheat', sa.Integer(), nullable=True),
-    sa.Column('skins', sa.Integer(), nullable=True),
+    sa.Column('money', sa.Float(), nullable=True),
+    sa.Column('wood', sa.Float(), nullable=True),
+    sa.Column('wheat', sa.Float(), nullable=True),
+    sa.Column('skins', sa.Float(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -120,6 +117,7 @@ def upgrade() -> None:
     sa.Column('skins_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('wood_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('wheat_for_next_lvl', sa.Integer(), nullable=True),
+    sa.Column('time_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('taxes', sa.Float(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -130,6 +128,7 @@ def upgrade() -> None:
     sa.Column('cur_level', sa.Integer(), nullable=True),
     sa.Column('money_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('wood_for_next_lvl', sa.Integer(), nullable=True),
+    sa.Column('time_for_next_lvl', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -137,13 +136,13 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('cur_level', sa.Integer(), nullable=True),
+    sa.Column('city_name', sa.String(), nullable=True),
     sa.Column('money_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('wheat_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('wood_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('time_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('time_for_citizen', sa.Integer(), nullable=True),
-    sa.Column('time_for_money_pack', sa.Integer(), nullable=True),
-    sa.Column('money_per_citizens', sa.Float(), nullable=True),
+    sa.Column('money_per_citizen', sa.Float(), nullable=True),
     sa.Column('citizens_in_city', sa.Integer(), nullable=True),
     sa.Column('unemployed_citizens', sa.Integer(), nullable=True),
     sa.Column('max_citizens', sa.Integer(), nullable=True),
@@ -170,7 +169,6 @@ def upgrade() -> None:
     sa.Column('cur_level', sa.Integer(), nullable=True),
     sa.Column('money_for_next_lvl', sa.Integer(), nullable=True),
     sa.Column('time_for_next_lvl', sa.Integer(), nullable=True),
-    sa.Column('time_for_res_pack', sa.Integer(), nullable=True),
     sa.Column('res_per_worker', sa.Float(), nullable=True),
     sa.Column('workers', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),

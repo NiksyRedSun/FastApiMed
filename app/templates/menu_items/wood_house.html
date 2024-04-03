@@ -5,19 +5,15 @@
 {% block menu_content %}
 <div class="stat_info">
     <div class="menu_par_info">Работников: {{context.level.workers}}</div>
-    <div class="menu_par_info">Время вырубки: {{context.secs_to_mins_in_nums(context.level.time_for_res_pack)}}</div>
-    <div class="menu_par_info">Дерева на одного работника: {{ context.level.res_per_worker }}</div>
-    <div class="menu_par_info">Дерева со всех работников: {{ context.level.res_per_worker*context.level.workers }}</div>
-</div>
-<div class="in_time_info">
-    <div class="menu_par_info">До следующей вырубки 4 минуты</div>
+    <div class="menu_par_info">Дерева на одного работника в час: {{ context.level.res_per_worker }}</div>
+    <div class="menu_par_info">Дерева со всех работников в час: {{ context.level.res_per_worker*context.level.workers }}</div>
 </div>
 
 <div class="set_title">Лесорубы</div>
 
 {% from "menu_items/citizen_set_block.html" import cit_set with context %}
 
-{{ cit_set(context.level_info.cit_img, context.level_info.cit_name, 0, 0, 50) }}
+{{ cit_set(context.level_info.cit_img, context.level_info.cit_name, 0, context.max_value, context.left_value, context.right_value) }}
 
 
 {% endblock %}
