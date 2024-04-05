@@ -6,7 +6,7 @@
 <div class="stat_info">
     <div class="menu_par_info">Работников: {{context.level.workers}}</div>
     <div class="menu_par_info">Шкур на одного работника в час: {{ context.level.res_per_worker }}</div>
-    <div class="menu_par_info">Шкур со всех работников в час: {{ context.level.res_per_worker*context.level.workers }}</div>
+    <div class="menu_par_info">Шкур со всех работников в час: {{ context.round(context.level.res_per_worker*context.level.workers, 2) }}</div>
 </div>
 
 <div class="set_title">Охотники</div>

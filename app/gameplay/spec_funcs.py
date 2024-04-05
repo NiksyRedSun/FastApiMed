@@ -116,6 +116,9 @@ def level_to_up(level):
     if type(level) == HunterHouse:
         level.res_per_worker = round(level.res_per_worker + 0.1, 1)
 
+    if type(level) == WoodHouse:
+        level.res_per_worker = round(level.res_per_worker + 0.1, 1)
+
     if type(level) == Market:
         level.taxes = round(level.taxes - 0.1, 1)
 
@@ -126,9 +129,7 @@ def level_to_up(level):
         level.time_for_knight -= 5
         level.max_knights += 50
 
-    if type(level) == WoodHouse:
-        level.time_for_res_pack -= 5
-        level.res_per_worker = round(level.res_per_worker + 0.1, 1)
+
 
     return level
 

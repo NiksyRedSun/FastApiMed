@@ -42,7 +42,7 @@
         {% endif %}
     </div>
 
-    <a class="top_menu" href="">
+    <a class="top_menu" href="{{ url_for('get_messages') }}">
         <img src="{{ url_for('static', path='images/top_menu/info.png') }}" alt="Сводка">
         <p>Сводка</p>
     </a>

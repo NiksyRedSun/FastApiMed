@@ -1,6 +1,6 @@
-from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, MetaData, Text, ForeignKey, Boolean, Float, Enum
+from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, MetaData, Text, ForeignKey, Boolean, Float, Enum, DateTime
 import enum
-
+import datetime
 from ..database import Base
 from sqlalchemy.orm import relationship
 
@@ -204,6 +204,22 @@ class Tower(Base):
 
     user = relationship("User", back_populates='tower')
 
+
+
+class Message(Base):
+    __tablename__ = "message"
+
+
+    id = Column("id", Integer, primary_key=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    created_datetime = Column(DateTime, default=datetime.datetime.utcnow)
+
+    text = Column("text", Text)
+    message_class = Column("message_class", Text)
+    is_checked = Column("is_checked", Boolean, default=False)
+
+
+    user = relationship("User", back_populates='messages')
 
 # user = User.__table__
 # alembic revision --autogenerate -m 'INPUTMESSAGEHERE'

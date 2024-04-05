@@ -42,8 +42,7 @@ level_info = {'town_square': {'short_name': 'Площадь', 'full_name': 'Го
                              'descr': 'Хозяин не любит появляться на людях. Люди не любят, встречаться с хозяином. Поэтому он живет здесь, всем от этого хорошо. Улучшите лачугу и у вас получится собирать больше дерева за меньшее время.'},
 
             'tower': {'short_name': 'Сторожевая башня', 'full_name': 'Сторожевая башня', 'img_link': 'images/cards/256/tower.png', 'slug': 'tower',
-                        'descr': 'Сторожевая башня. Чтобы наблюдать, не наблюдает ли кто-нибудь за вами. Улучшение сторожевой башни приведет к уменьшению времени, которое потребуется чтобы добраться до других игроков.'},
-
+                        'descr': 'Сторожевая башня. Чтобы наблюдать, не наблюдает ли кто-нибудь за вами. Улучшение сторожевой башни приведет к уменьшению времени, которое потребуется чтобы добраться до других игроков.'}
             }
 
 
@@ -69,6 +68,7 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     dict_context["secs_to_mins"] = seconds_to_minutes
     dict_context["secs_to_mins_in_nums"] = seconds_to_minutes_in_nums
     dict_context["to_int"] = int
+    dict_context["round"] = round
 
     #инвентарь и название города
     async with session:
@@ -82,33 +82,37 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
 
     #материал по уровням
     if slug is not None:
-        dict_context['level_info'] = level_info[slug]
-        dict_context['level_slug'] = slug
-        dict_context['secs_to_upgrade'] = gameplay.seconds_to_upgrade[slug]
+        if slug in level_info:
+            dict_context['level_info'] = level_info[slug]
+            dict_context['level_slug'] = slug
+            dict_context['secs_to_upgrade'] = gameplay.seconds_to_upgrade[slug]
 
-        async with session:
-            dict_context['level'] = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
+            async with session:
+                dict_context['level'] = await gameplay.get_obj_by_user_id(session, model_by_slug[slug])
 
-            if slug in ['hunter_house', 'wood_house', 'fields']:
-                query = select(TownSquare.unemployed_citizens).where(TownSquare.user_id == gameplay.user_id)
-                uc_result = await session.execute(query)
-                query = select(model_by_slug[slug].workers).where(model_by_slug[slug].user_id == gameplay.user_id)
-                w_result = await session.execute(query)
+                if slug in ['hunter_house', 'wood_house', 'fields']:
+                    query = select(TownSquare.unemployed_citizens).where(TownSquare.user_id == gameplay.user_id)
+                    uc_result = await session.execute(query)
+                    query = select(model_by_slug[slug].workers).where(model_by_slug[slug].user_id == gameplay.user_id)
+                    w_result = await session.execute(query)
 
-                unemployed_citizens = uc_result.scalar_one()
-                workers = w_result.scalar_one()
+                    unemployed_citizens = uc_result.scalar_one()
+                    workers = w_result.scalar_one()
 
-                dict_context['max_value'] = unemployed_citizens + workers
-                dict_context['left_value'] = unemployed_citizens
-                dict_context['right_value'] = workers
+                    dict_context['max_value'] = unemployed_citizens + workers
+                    dict_context['left_value'] = unemployed_citizens
+                    dict_context['right_value'] = workers
 
 
-        #в зависимости от уровня отправляются данные, изменяющиеся по времени
-        if slug == 'town_square':
-            dict_context['secs_to_cit'] = gameplay.seconds_to_new_citizen
+            #в зависимости от уровня отправляются данные, изменяющиеся по времени
+            if slug == 'town_square':
+                dict_context['secs_to_cit'] = gameplay.seconds_to_new_citizen
 
-        elif slug == 'war_house':
-            pass
+            elif slug == 'war_house':
+                pass
+        else:
+            if slug == 'messages':
+                pass
 
     else:
         dict_context['levels_info'] = level_info.values()

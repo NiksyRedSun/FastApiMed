@@ -11,7 +11,7 @@ from levels.router import router as router_menu
 from starlette.staticfiles import StaticFiles
 from app.config import templates
 from app.auth.router import router as auth_router
-from app.gameplay.gameplay import start_game
+from app.gameplay.gameplay import start_game, gameplays
 from contextlib import asynccontextmanager
 from app.gameplay.context import make_context
 from app.levels.models import *
@@ -47,6 +47,15 @@ async def get_menu(request: Request, user: User | None = Depends(current_user), 
     #         "data": ":(",
     #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
     #     }
+
+
+@app.get("/second_test")
+# async def test_router(request: Request, session: AsyncSession = Depends(get_async_session)):
+async def test_router(request: Request, user: User | None = Depends(current_user), session: AsyncSession = Depends(get_async_session)):
+    gameplay = gameplays[user.id]
+    messages = await gameplay.get_messages(session)
+    await gameplay.get_count_unread_messages(session)
+    print(messages)
 
 
 

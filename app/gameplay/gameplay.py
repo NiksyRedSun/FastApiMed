@@ -1,6 +1,6 @@
 import asyncio
 from app.auth.models import User
-from sqlalchemy import select, update
+from sqlalchemy import select, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_async_session, async_session_maker
 from app.levels.models import *
@@ -9,6 +9,13 @@ from app.gameplay.spec_funcs import check_inv, model_by_slug, standart_level_up,
 
 
 gameplays = {}
+
+name_by_slug = {'town_square': 'Городская площадь', 'war_house':'Казармы', 'bar': 'Таверна', 'market': 'Рынок',
+                'fields': 'Поля', 'hunter_house': 'Лачуга охотника', 'wood_house': 'Дом лесоруба', 'tower': 'Сторожевая башня'}
+
+def message_check(message: Message):
+    message.is_checked = True
+    return message
 
 
 async def start_game():
@@ -134,6 +141,36 @@ class GamePlay:
 
 
 
+    async def make_message(self, session: AsyncSession, message_class: str, message: str):
+        async with session:
+            message = Message(user_id=self.user_id, text=message, message_class=message_class)
+            session.add(message)
+            await session.commit()
+
+
+    #Как только отрабатывает эта функция - пользователь обязан попадать на страницу сообщений,
+    # поскольку все сообщения переходят в прочитанные
+    async def get_messages(self, session: AsyncSession):
+        async with session:
+            query = select(Message).where(Message.user_id == self.user_id)
+            result = await session.execute(query)
+            messages = result.scalars().all()
+            messages = list(map(message_check, messages))
+            session.add_all(messages)
+            await session.commit()
+        return messages
+
+
+
+    async def get_count_unread_messages(self, session: AsyncSession):
+        async with session:
+            query = select(Message).where((Message.user_id == self.user_id) & (Message.is_checked == False))
+            count_query = select(func.count()).select_from(query.subquery())
+            result = await session.execute(count_query)
+        return result.scalar()
+
+
+
     async def make_money(self):
         session = async_session_maker()
         while True:
@@ -172,6 +209,8 @@ class GamePlay:
                 session.add(inventory)
                 print(f"Горожане собрали {round(wood_pack/60, 2)} дерева")
                 await session.commit()
+
+
 
 
 
@@ -244,6 +283,8 @@ class GamePlay:
             session.add(level)
             print(f"Строение игрока {self.user_id} улучшено")
             await session.commit()
+
+        await self.make_message(session, "build", f"Здание {name_by_slug[level_slug]} улучшено до уровня {level.cur_level}")
 
 
 

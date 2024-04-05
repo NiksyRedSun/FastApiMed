@@ -133,3 +133,19 @@ async def distribute_workers(request: Request, slug: str, session: AsyncSession 
     #     }
 
 
+@router.get("/messages")
+async def get_messages(request: Request, session: AsyncSession = Depends(get_async_session), user: User | None = Depends(current_user)):
+    # try:
+        if user is None:
+            return RedirectResponse(request.url_for('login_get'), status_code=302)
+        else:
+            context = await make_context(session, user, 'messages')
+            return templates.TemplateResponse(f"menu_items/messages.html", {"request": request, "context": context})
+
+    # except Exception as e:
+    #     return {
+    #         "status": "error",
+    #         "data": e,
+    #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+    #     }
+
