@@ -53,8 +53,8 @@ async def get_menu(request: Request, user: User | None = Depends(current_user), 
 # async def test_router(request: Request, session: AsyncSession = Depends(get_async_session)):
 async def test_router(request: Request, user: User | None = Depends(current_user), session: AsyncSession = Depends(get_async_session)):
     gameplay = gameplays[user.id]
-    messages = await gameplay.get_messages(session)
-    await gameplay.get_count_unread_messages(session)
+    messages = await gameplay.get_notifications(session)
+    await gameplay.get_count_unread_notifications(session)
     print(messages)
 
 

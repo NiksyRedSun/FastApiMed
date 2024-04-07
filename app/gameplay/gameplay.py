@@ -1,6 +1,6 @@
 import asyncio
 from app.auth.models import User
-from sqlalchemy import select, update, func
+from sqlalchemy import select, update, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_async_session, async_session_maker
 from app.levels.models import *
@@ -13,9 +13,9 @@ gameplays = {}
 name_by_slug = {'town_square': 'Городская площадь', 'war_house':'Казармы', 'bar': 'Таверна', 'market': 'Рынок',
                 'fields': 'Поля', 'hunter_house': 'Лачуга охотника', 'wood_house': 'Дом лесоруба', 'tower': 'Сторожевая башня'}
 
-def message_check(message: Message):
-    message.is_checked = True
-    return message
+def message_check(notification: Notification):
+    notification.is_checked = True
+    return notification
 
 
 async def start_game():
@@ -141,30 +141,30 @@ class GamePlay:
 
 
 
-    async def make_message(self, session: AsyncSession, message_class: str, message: str):
+    async def make_notification(self, session: AsyncSession, notification_class: str, notification: str):
         async with session:
-            message = Message(user_id=self.user_id, text=message, message_class=message_class)
-            session.add(message)
+            notification = Notification(user_id=self.user_id, text=notification, notification_class=notification_class)
+            session.add(notification)
             await session.commit()
 
 
     #Как только отрабатывает эта функция - пользователь обязан попадать на страницу сообщений,
     # поскольку все сообщения переходят в прочитанные
-    async def get_messages(self, session: AsyncSession):
+    async def get_notifications(self, session: AsyncSession):
         async with session:
-            query = select(Message).where(Message.user_id == self.user_id)
+            query = select(Notification).where(Notification.user_id == self.user_id).order_by(desc(Notification.created_datetime))
             result = await session.execute(query)
-            messages = result.scalars().all()
-            messages = list(map(message_check, messages))
-            session.add_all(messages)
+            notifications = result.scalars().all()
+            notifications = list(map(message_check, notifications))
+            session.add_all(notifications)
             await session.commit()
-        return messages
+        return notifications
 
 
 
-    async def get_count_unread_messages(self, session: AsyncSession):
+    async def get_count_unread_notifications(self, session: AsyncSession):
         async with session:
-            query = select(Message).where((Message.user_id == self.user_id) & (Message.is_checked == False))
+            query = select(Notification).where((Notification.user_id == self.user_id) & (Notification.is_checked == False))
             count_query = select(func.count()).select_from(query.subquery())
             result = await session.execute(count_query)
         return result.scalar()
@@ -284,7 +284,7 @@ class GamePlay:
             print(f"Строение игрока {self.user_id} улучшено")
             await session.commit()
 
-        await self.make_message(session, "build", f"Здание {name_by_slug[level_slug]} улучшено до уровня {level.cur_level}")
+        await self.make_notification(session, "build", f"Здание {name_by_slug[level_slug]} улучшено до уровня {level.cur_level}")
 
 
 

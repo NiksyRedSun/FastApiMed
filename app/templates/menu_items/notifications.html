@@ -1,0 +1,18 @@
+{% extends "./base.html"%}
+
+
+
+{% block content %}
+<div class="in_menu_point">
+<div class="notifications_title">ⵈ━══════╗Сводка╔══════━ⵈ</div>
+    <div class="notifications_block">
+        {% for notification in context.notifications%}
+        <div class="notification">• {{ notification.text }}</div>
+        <div class="notification_datetime">{{ notification.created_datetime }}</div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+{% endblock %}

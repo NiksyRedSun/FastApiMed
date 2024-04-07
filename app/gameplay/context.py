@@ -70,10 +70,20 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
     dict_context["to_int"] = int
     dict_context["round"] = round
 
-    #инвентарь и название города
+    # Почему это здесь?
+    # Потому что в случае, если пользователь посмотрит в запросы, они все должны превратиться в прочитанные
+    # Иконка с количеством запросов должна прекратить светиться
+    if slug == "notifications":
+        notifications = await gameplay.get_notifications(session)
+        dict_context["notifications"] = notifications
+
+    #общие данные, не зависящие от конкретной страницы
     async with session:
         inventory = await gameplay.get_obj_by_user_id(session, Inventory)
         dict_context['inventory'] = inventory
+
+        notification_count = await gameplay.get_count_unread_notifications(session)
+        dict_context['notifications_count'] = notification_count
 
 
         query = select(TownSquare.city_name).where(TownSquare.user_id == gameplay.user_id)
@@ -111,8 +121,7 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
             elif slug == 'war_house':
                 pass
         else:
-            if slug == 'messages':
-                pass
+            pass
 
     else:
         dict_context['levels_info'] = level_info.values()

@@ -1,8 +1,9 @@
 body {
     background-color: #8d6644;
     background-image: url("sitefon.png");
-    background-size: cover;
+    /*background-size: cover;*/
     /*background-attachment: fixed;*/
+    background-repeat: no-repeat;
     width: 1300px;
     margin: 0 auto;
     overflow-x: auto;
@@ -574,3 +575,29 @@ div.upgrade > div.error {
     color: #790604;
 }
 
+
+div.notifications_title {
+    text-align: center;
+    font-size: 40pt;
+}
+
+div.notification {
+    font-size: 26pt;
+
+}
+
+div.notification_datetime {
+    text-align: right;
+    font-size: 16pt;
+    margin: 1% 0% 2% 0%;
+}
+
+div.notifications_block {
+    margin: 2% 0% 0% 0%;
+}
+
+span.notifications_count {
+    background: #790604;
+    color: white;
+    border-radius: 10px;
+}

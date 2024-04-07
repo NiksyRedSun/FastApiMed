@@ -19,7 +19,7 @@ class User(Base):
     is_verified: bool = Column(Boolean, default=False, nullable=False)
 
     inventory: Mapped[Inventory] = relationship(back_populates='user', cascade='all,delete-orphan', single_parent=True)
-    messages: Mapped[List[Message]] = relationship(back_populates="user")
+    notifications: Mapped[List[Notification]] = relationship(back_populates="user")
 
     knights: Mapped[List[Knight]] = relationship(back_populates="user")
     archers: Mapped[List[Archer]] = relationship(back_populates="user")

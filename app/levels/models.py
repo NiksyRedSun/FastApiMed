@@ -206,8 +206,8 @@ class Tower(Base):
 
 
 
-class Message(Base):
-    __tablename__ = "message"
+class Notification(Base):
+    __tablename__ = "notification"
 
 
     id = Column("id", Integer, primary_key=True)
@@ -215,11 +215,11 @@ class Message(Base):
     created_datetime = Column(DateTime, default=datetime.datetime.utcnow)
 
     text = Column("text", Text)
-    message_class = Column("message_class", Text)
+    notification_class = Column("notification_class", Text)
     is_checked = Column("is_checked", Boolean, default=False)
 
 
-    user = relationship("User", back_populates='messages')
+    user = relationship("User", back_populates='notifications')
 
 # user = User.__table__
 # alembic revision --autogenerate -m 'INPUTMESSAGEHERE'

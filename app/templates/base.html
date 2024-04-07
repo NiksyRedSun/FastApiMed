@@ -42,9 +42,13 @@
         {% endif %}
     </div>
 
-    <a class="top_menu" href="{{ url_for('get_messages') }}">
+    <a class="top_menu" href="{{ url_for('get_notifications') }}">
         <img src="{{ url_for('static', path='images/top_menu/info.png') }}" alt="Сводка">
-        <p>Сводка</p>
+        <p>Сводка
+            {% if context.notifications_count > 0 %}
+            <span class="notifications_count">{{ context.notifications_count }}</span>
+            {% endif %}
+        </p>
     </a>
 </nav>
     {% block content %}
