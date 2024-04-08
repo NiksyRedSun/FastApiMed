@@ -55,7 +55,7 @@ async def test_router(request: Request, user: User | None = Depends(current_user
     gameplay = gameplays[user.id]
     messages = await gameplay.get_notifications(session)
     await gameplay.get_count_unread_notifications(session)
-    print(messages)
+    print()
 
 
 

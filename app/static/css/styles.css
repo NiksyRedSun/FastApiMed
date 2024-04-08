@@ -581,15 +581,24 @@ div.notifications_title {
     font-size: 40pt;
 }
 
-div.notification {
+div.notification > div {
     font-size: 26pt;
-
+    vertical-align: center;
+    horiz-align: center;
+    padding: 1.5% 0% 0% 1%;
 }
 
 div.notification_datetime {
     text-align: right;
-    font-size: 16pt;
+    font-size: 20pt;
     margin: 1% 0% 2% 0%;
+    color: darkred;
+}
+
+div.notification {
+    display: flex;
+    flex-direction: row;
+    vertical-align: center;
 }
 
 div.notifications_block {
@@ -600,4 +609,12 @@ span.notifications_count {
     background: #790604;
     color: white;
     border-radius: 10px;
+}
+
+div.notification > span {
+    color: #591038;
+}
+
+div.notification > img {
+    width: 6%;
 }

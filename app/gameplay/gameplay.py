@@ -15,6 +15,7 @@ name_by_slug = {'town_square': 'Городская площадь', 'war_house':
 
 def message_check(notification: Notification):
     notification.is_checked = True
+    setattr(notification, 'time_str', notification.created_datetime.strftime("%H:%M %d.%m.%Y"))
     return notification
 
 
@@ -284,7 +285,7 @@ class GamePlay:
             print(f"Строение игрока {self.user_id} улучшено")
             await session.commit()
 
-        await self.make_notification(session, "build", f"Здание {name_by_slug[level_slug]} улучшено до уровня {level.cur_level}")
+        await self.make_notification(session, "build", f"Здание <span>{name_by_slug[level_slug]}</span> улучшено до уровня {level.cur_level}")
 
 
 

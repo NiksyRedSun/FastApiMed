@@ -7,8 +7,13 @@
 <div class="notifications_title">ⵈ━══════╗Сводка╔══════━ⵈ</div>
     <div class="notifications_block">
         {% for notification in context.notifications%}
-        <div class="notification">• {{ notification.text }}</div>
-        <div class="notification_datetime">{{ notification.created_datetime }}</div>
+        <div class="notification">
+            {% if notification.notification_class == 'build' %}
+            <img src="{{ url_for('static', path='images/notifs_images/build_up_500.png') }}" alt="Улучшение">
+            {% endif %}
+            <div> {{ notification.text | safe }}</div>
+        </div>
+        <div class="notification_datetime">{{ notification.time_str }}</div>
         {% endfor %}
     </div>
 
