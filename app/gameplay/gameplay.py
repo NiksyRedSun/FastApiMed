@@ -6,6 +6,7 @@ from app.database import get_async_session, async_session_maker
 from app.levels.models import *
 from sqlalchemy.orm import selectinload
 from app.gameplay.spec_funcs import check_inv, model_by_slug, standart_level_up, level_to_up
+import random
 
 
 gameplays = {}
@@ -43,13 +44,16 @@ class GamePlay:
         self.town_square = None
 
         self.seconds_to_new_citizen = None
-        self.seconds_to_new_knight = None
-        self.seconds_to_new_archer = None
+
+        self.seconds_to_new_fighter = {'archer': 0, 'knight': 0}
+        self.fighters_queue = {'archer': 0, 'knight': 0}
 
         self.seconds_to_upgrade = {
                             'town_square': None, 'wood_house': None, 'war_house': None, 'tower': None,
                              'market': None, 'hunter_house': None, 'fields': None, 'bar': None
         }
+
+
 
         self.money = 0
 
@@ -69,6 +73,51 @@ class GamePlay:
             town_square.city_name = city_name
             session.add(town_square)
             await session.commit()
+
+
+
+    # Попробуем расширенную аннотацию чель
+    async def new_fighter(self, session: AsyncSession, model: [Archer, Knight]):
+        async with session:
+            fighter = model(user_id=self.user_id, attack=random.randint(1, 4), defense=random.randint(1, 4),
+                            agility=random.randint(1, 4), max_hp=random.randint(8, 10))
+            session.add(fighter)
+            await session.commit()
+
+
+
+    async def get_count_fighters(self, session: AsyncSession, model: [Archer, Knight]):
+        async with session:
+            query = select(model).where((model.user_id == self.user_id))
+            count_query = select(func.count()).select_from(query.subquery())
+            result = await session.execute(count_query)
+        return result.scalar()
+
+
+
+    async def make_fighters(self, session: AsyncSession, model_slug: str, fighters_num: int):
+        self.fighters_queue[model_slug] = fighters_num
+
+        while self.fighters_queue[model_slug] > 0:
+
+            fighters_maker_model = await self.get_obj_by_user_id(session, model_by_slug[model_slug])
+            self.seconds_to_new_fighter[model_slug] = fighters_maker_model.time_for_fighter
+
+            while self.seconds_to_new_fighter[model_slug] > 0:
+                if self.seconds_to_new_fighter[model_slug] >= 60:
+                    await asyncio.sleep(60)
+                    self.seconds_to_new_fighter[model_slug] -= 60
+                else:
+                    await asyncio.sleep(self.seconds_to_new_fighter[model_slug])
+                    self.seconds_to_new_fighter[model_slug] = 0
+
+
+            await self.new_fighter(session, model_by_slug[model_slug])
+            print(f'Новый боец игрока {self.user_id} готов')
+            self.fighters_queue[model_slug] -= 1
+
+
+
 
 
     # вернет true - если все круто, вернет str, если есть проблемы

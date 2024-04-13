@@ -113,6 +113,12 @@ async def make_context(session: AsyncSession, user: User, slug: str = None):
                     dict_context['left_value'] = unemployed_citizens
                     dict_context['right_value'] = workers
 
+                if slug in ['bar', 'war_house']:
+                    if slug == 'bar':
+                        dict_context['fighters_count'] = await gameplay.get_count_fighters(session, model_by_slug['archer'])
+                    elif slug == 'war_house':
+                        dict_context['fighters_count'] = await gameplay.get_count_fighters(session, model_by_slug['knight'])
+
 
             #в зависимости от уровня отправляются данные, изменяющиеся по времени
             if slug == 'town_square':

@@ -2,7 +2,8 @@ from app.levels.models import *
 from sqlalchemy.ext.asyncio import AsyncSession
 
 model_by_slug = {'town_square': TownSquare, 'wood_house': WoodHouse, 'war_house': WarHouse, 'tower': Tower,
-                 'market': Market, 'hunter_house': HunterHouse, 'fields': Fields, 'bar': Bar}
+                 'market': Market, 'hunter_house': HunterHouse, 'fields': Fields, 'bar': Bar, 'archer': Archer,
+                 'knight': Knight}
 
 
 

@@ -149,3 +149,26 @@ async def get_notifications(request: Request, session: AsyncSession = Depends(ge
     #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
     #     }
 
+
+@router.post("/make_fighters_queue/{slug}")
+async def make_fighters_queue(request: Request, slug: str, session: AsyncSession = Depends(get_async_session), user: User | None = Depends(current_user),
+                    left_value: int = Form(default=0), right_value: int = Form(default=0)):
+    # try:
+        if user is None:
+            return RedirectResponse(request.url_for('login_get'), status_code=302)
+        else:
+            gameplay = gameplays[user.id]
+            result = await gameplay.distribute_workers(session, left_value, right_value, model_by_slug[slug])
+            if type(result) == str:
+                return RedirectResponse(request.url_for("get_level", slug=slug).include_query_params(form_message=result, form_message_class='error'), status_code=302)
+            else:
+                return RedirectResponse(request.url_for("get_level", slug=slug).include_query_params(form_message='Распределение рабочих успешно', form_message_class='success'), status_code=302)
+
+
+    # except Exception as e:
+    #     return {
+    #         "status": "error",
+    #         "data": e,
+    #         "details": 'По какой-то причине возникла ошибка, лучшее что вы можете сделать - написать админу'
+    #     }
+

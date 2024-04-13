@@ -4,9 +4,9 @@
 
 {% block menu_content %}
 <div class="stat_info">
-    <div class="menu_par_info">Всего лучников: {{ context.level.archers }}</div>
+    <div class="menu_par_info">Всего лучников: {{ context.fighters_count }}</div>
     <div class="menu_par_info">Максимум лучников: {{ context.level.max_archers }}</div>
-    <div class="menu_par_info">Время тренировки лучника: {{ context.secs_to_mins_in_nums(context.level.time_for_archer) }}</div>
+    <div class="menu_par_info">Время тренировки лучника: {{ context.secs_to_mins_in_nums(context.level.time_for_fighter) }}</div>
 </div>
 <div class="in_time_info">
     <div class="menu_par_info">До следующего лучника 4 минуты</div>

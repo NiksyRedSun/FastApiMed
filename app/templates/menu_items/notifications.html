@@ -11,7 +11,7 @@
             {% if notification.notification_class == 'build' %}
             <img src="{{ url_for('static', path='images/notifs_images/build_up_500.png') }}" alt="Улучшение">
             {% endif %}
-            <div> {{ notification.text | safe }}</div>
+            <div class="notification_text"> {{ notification.text | safe }}</div>
         </div>
         <div class="notification_datetime">{{ notification.time_str }}</div>
         {% endfor %}

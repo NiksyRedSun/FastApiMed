@@ -4,9 +4,9 @@
 
 {% block menu_content %}
 <div class="stat_info">
-    <div class="menu_par_info">Всего рыцарей: {{ context.level.knights }}</div>
+    <div class="menu_par_info">Всего рыцарей: {{ context.fighters_count }}</div>
     <div class="menu_par_info">Максимум рыцарей: {{ context.level.max_knights }}</div>
-    <div class="menu_par_info">Время тренировки рыцаря: {{ context.secs_to_mins_in_nums(context.level.time_for_knight) }}</div>
+    <div class="menu_par_info">Время тренировки рыцаря: {{ context.secs_to_mins_in_nums(context.level.time_for_fighter) }}</div>
 </div>
 <div class="in_time_info">
     <div class="menu_par_info">До следующего рыцаря 4 минуты</div>

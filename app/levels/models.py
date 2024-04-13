@@ -27,7 +27,6 @@ class Knight(Base):
     attack = Column("attack", Integer)
     defense = Column("defense", Integer)
     agility = Column("agility", Integer)
-    hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
     user = relationship("User", back_populates='knights')
 
@@ -41,7 +40,6 @@ class Archer(Base):
     attack = Column("attack", Integer)
     defense = Column("defense", Integer)
     agility = Column("agility", Integer)
-    hp = Column("hp", Integer)
     max_hp = Column("max_hp", Integer)
     user = relationship("User", back_populates='archers')
 
@@ -150,8 +148,7 @@ class WarHouse(Base):
     wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=10)
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
 
-    time_for_knight = Column("time_for_knight", Integer, default=30)
-    knights = Column("knights", Integer, default=0)
+    time_for_fighter = Column("time_for_fighter", Integer, default=30)
     max_knights = Column("max_knights", Integer, default=50)
     user = relationship("User", back_populates='war_house')
 
@@ -168,8 +165,7 @@ class Bar(Base):
     wood_for_next_lvl = Column("wood_for_next_lvl", Integer, default=10)
     time_for_next_lvl = Column("time_for_next_lvl", Integer, default=30)
 
-    time_for_archer = Column("time_for_archer", Integer, default=30)
-    archers = Column("archers", Integer, default=0)
+    time_for_fighter = Column("time_for_fighter", Integer, default=30)
     max_archers = Column("max_archers", Integer, default=50)
     user = relationship("User", back_populates='bar')
 
